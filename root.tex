@@ -2,13 +2,14 @@
 % Updated on March 1, 2010 by Noah J. Cowan
 
 
-\documentclass[12pt,oneside,draft]{thesis}
+\documentclass[12pt,oneside]{thesis}
 
 \usepackage[superscript]{cite}
 \usepackage{amsmath,amsfonts,amstext}
 \usepackage{url}
 \newcommand{\degree}{\ensuremath{^\circ}}
 \usepackage{graphicx}
+\usepackage{epstopdf}
 \graphicspath{{./figs/}}
 %\usepackage{fixltx2e}
 \usepackage{array}
@@ -17,6 +18,7 @@
 %\usepackage{times}  % Use this for ugly fonts
 
 \usepackage{upgreek}
+\usepackage{textgreek}
 \usepackage{hyperref}
 \usepackage{setspace}
 
@@ -56,6 +58,27 @@
 
 %\makeglossary % enable the glossary
 
+% DAN ADDED
+\usepackage{appendix}
+
+% See:
+% http://tex.stackexchange.com/questions/11579/captions-for-figures-in-listoffigures
+% http://tex.stackexchange.com/questions/82858/how-to-get-thumbnails-in-a-list-of-figures
+\newlength{\lofthumbsize}
+\setlength{\lofthumbsize}{8em}
+
+\newif\iflofimage
+\DeclareRobustCommand*{\lofimage}[2][]{%
+\iflofimage
+$\vspace*{-1.2\baselineskip}
+  \hbox to .7\columnwidth{\hss\raisebox{1\baselineskip}{\includegraphics[{width=\lofthumbsize,keepaspectratio=true,#1}]{#2}}\hss}%
+$%
+\vspace*{0.2\baselineskip}
+\newline
+\fi
+\ignorespaces
+}
+
 \begin{document}
 
 \title{Interfacial Microrheology of Biological Films}
@@ -68,7 +91,13 @@
 
 
 % add your chapters, best way is to have separate TeX files for each chapter
+\include{chapter0}
+\include{introduction}
+\include{methods}
+\include{trackpy}
 \include{lysozyme}
+\include{bacteria}
+\include{photoactivation}
 \include{appendix}
 
 %% REFERENCES

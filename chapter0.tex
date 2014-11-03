@@ -21,12 +21,6 @@ Thanks!
 
 \end{acknowledgment}
 
-\begin{dedication}
- 
-This thesis is dedicated to \ldots
-
-\end{dedication}
-
 % generate table of contents
 \tableofcontents
 
@@ -34,6 +28,13 @@ This thesis is dedicated to \ldots
 \listoftables
 
 % generate list of figures
+\lofimagetrue
+\twocolumn
+\begingroup
+\let\onecolumn\twocolumn
 \listoffigures
+\endgroup
+\onecolumn
+\lofimagefalse
 
 \end{frontmatter}

@@ -1,4 +1,5 @@
-\chapter{Lysozyme}
+\chapter{Linear and Nonlinear Microrheology of Lysozyme Layers Forming at the Air--Water Interface}
+\chaptermark{Lysozyme Layers}
 
 \section{\label{sec:introduction}Introduction}
 
@@ -113,13 +114,13 @@ The rheology at an air interface with the lysozyme solutions evolves quickly fol
 
 
 \begin{figure}
- \includegraphics[width=\linewidth,keepaspectratio]{Fig1_msd.eps}
- \caption{\label{fig:emsds}Ensemble-average mean-squared displacements of 0.5-$\mu$m radius colloids at the air interface of a lysozyme solution (0.05 mg/ml, pH 7.4) at ages $t_a$ = 140 (squares), 310 (diamonds), 450 (triangles), and 550 (solid circles) seconds since formation of the interface.  Also shown is the mean-squared displacement of the probes at the air-buffer interface in the absence of protein.  The solid lines are the results of power-law fits.}
+ \includegraphics[width=\linewidth,keepaspectratio]{lysozyme/Fig1_msd}
+ \caption[\lofimage{lysozyme/Fig1_msd}Ensemble-average mean-squared displacements of colloids at the air interface]{\label{fig:emsds}Ensemble-average mean-squared displacements of 0.5-$\mu$m radius colloids at the air interface of a lysozyme solution (0.05 mg/ml, pH 7.4) at ages $t_a$ = 140 (squares), 310 (diamonds), 450 (triangles), and 550 (solid circles) seconds since formation of the interface.  Also shown is the mean-squared displacement of the probes at the air-buffer interface in the absence of protein.  The solid lines are the results of power-law fits.}
 \end{figure}
 
 
 \begin{figure}
- \includegraphics[width=\linewidth,keepaspectratio]{Fig2_power-law-exponent.eps}
+ \includegraphics[width=\linewidth,keepaspectratio]{lysozyme/Fig2_power-law-exponent}
  \caption{\label{fig:power-law_expon} Power-law exponent characterizing the ensemble average mean-squared displacements, $\langle \Delta r^2(t) \rangle \propto t^{\alpha}$, of colloids at the air interface of a lysozyme solution as a function of the age since formation of the interface.}
 \end{figure}
 
@@ -136,7 +137,7 @@ The rheology at an air interface with the lysozyme solutions evolves quickly fol
 As in the passive microrheology, the active nanowire microrheology reveals a pronounced evolution in the mechanical behavior of the lysozyme layers with increasing layer age.  Close inspection of the results in the active measurements and comparison with those from the passive measurements, however, show that they probe a different aspect of the layer response, specifically its nonlinear rheology.  For example, Figs.~\ref{fig:early-and-late-rotation}(a) and \ref{fig:early-and-late-rotation}(b) display the angle $\theta$ between an 11-$\mu$m-long wire and an applied magnetic field as a function of time following a 90\degree\ step change in the direction of the field at layer ages $t_{\text{a}}=$ 2700 s and 8200 s, respectively.  At early ages, such as $t_{\text{a}}=$ 2700 s (Fig.~\ref{fig:early-and-late-rotation}(a)), the wire rotates rapidly in response to the magnetic torque so that the angle between the wire axis and the magnetic field relaxes fully to zero in a short time, and the response at these ages is consistent with the wire experiencing simple viscous drag.  The dashed line through the data in Fig.~\ref{fig:early-and-late-rotation}(a) shows the result of a fit using the form for viscous drag, Eq.~(\ref{eq:sasha}), which agrees closely with the data.  Such agreement is observed at all layer ages up to $t_a \approx 3000$ seconds.  The interfacial viscosity extracted from the fit using Eq.~(\ref{eq:wire_zeta}) is 21 nPa$\cdot$m$\cdot$s, which implies $L\eta/\eta_s \approx 2$, near the lower limit of interfacial viscosity where Eq.~(\ref{eq:wire_zeta}) is a valid approximation for the drag coefficient. 
 
 \begin{figure}
-  \includegraphics[width=\linewidth,keepaspectratio]{Fig3_compare-early-late.eps}
+  \includegraphics[width=\linewidth,keepaspectratio]{lysozyme/Fig3_compare-early-late}
  \caption{\label{fig:early-and-late-rotation} Angle between the axis of a 11-$\mu$m-long Ni nanowire and external magnetic field as a function of time following a step change in the field direction of 90\degree~at interface ages (a) $t_{\text{a}}=$ 2700 s ($B = 30$ G) and (b) $t_{\text{a}}=$ 8200 s ($B = 60$ G).  The dashed lines in (a) and (b) are the results of fits to the data using a form based on simple viscous drag (Eq.~(\ref{eq:sasha})), and the solid line in (b) is the result of a fit using a form based on drag from a power-law fluid (Eq.~(\ref{eq:pf-solution})).}
 \end{figure}
 
@@ -152,7 +153,7 @@ While Eq.~(\ref{eq:pf-solution}) describes accurately the angular rotation of th
 \noindent Thus, the power-law-fluid model predicts that the logarithm of the time derivative of $\theta(t)$ varies linearly with the logarithm of $\sin\left(\theta\right)$ and that the inverse of the flow index $1/n$ is the proportionality constant.  As a test of this prediction, Fig.~\ref{fig:linearization} shows results for the wire rotation at a series of layer ages plotted in this way, where the values of $\ln(\dot{\theta})$ are obtained from $\theta(t)$ through the Savitzky-Golay smoothing algorithm.~\cite{Savitzky1964}  As the figure indicates, the data follow a linear relationship as expected from Eq.~(\ref{eq:pf_linearized}).~~Further, we find that linear fits with Eq.~(\ref{eq:pf_linearized}) provide a more reliable method of obtaining $n$ than do direct fits to $\theta(t)$ using Eq.~(\ref{eq:pf-solution}).~~For instance, the change from $n \approx 1$ at early ages to shear-thinning behavior at late ages is seen clearly in the change in slope of the data in Fig.~\ref{fig:linearization}.  Figure \ref{fig:m-with-age} displays the values of $n$ extracted from fits using Eq.~(\ref{eq:pf_linearized}) as a function of layer age.  The flow index appears to undergo an abrupt decrease around $t_{\text{a}} = $ 3000 s from $n \approx 1$ to $n \approx 0.7$.  (The data could also be interpreted as a steady decrease in $n$, but one should not expect that $n$ extrapolates at early times to values greater than one, which would imply shear-thickening behavior.)  The values of $n$ obtained for the lysozyme layers at late ages are typical of shear-thinning materials that behave as power-law fluids, where in most cases $0.3 < n < 1$ is observed.~\cite{Huang1998a, Larrard1998}   
 
 \begin{figure}
-  \includegraphics[width=\linewidth,keepaspectratio]{Fig4_linearization-AT20-40G.eps}
+  \includegraphics[width=\linewidth,keepaspectratio]{lysozyme/Fig4_linearization-AT20-40G}
  \caption{\label{fig:linearization}  Logarithm of the nanowire rotation rate as a function of the logarithm of $\sin(\theta)$, where $\theta$ is the angle between the wire axis and external magnetic field, at interface ages $t_a =$ 1320 seconds (red circles), 2700 seconds (blue triangles), 3600 seconds (green squares), 5100 seconds (purple diamonds), and 6600 seconds (orange inverted triangles).  The solid lines are the results of linear fits. The slope increases with layer age from near one at early ages to above 1.5 at late ages.}
 \end{figure}
 
@@ -161,7 +162,7 @@ While Eq.~(\ref{eq:pf-solution}) describes accurately the angular rotation of th
 
 
 \begin{figure}
-  \includegraphics[width=\linewidth,keepaspectratio]{Fig5_m-with-age-avg-fields.eps}
+  \includegraphics[width=\linewidth,keepaspectratio]{lysozyme/Fig5_m-with-age-avg-fields}
   \caption{\label{fig:m-with-age}Flow index $n$ as a function of layer age. At each age, $n$ is determined from measurements at several magnetic-field values. The error bars incorporate both statistical variation in $n$ and measurement uncertainty.}
 \end{figure}
 
@@ -171,7 +172,7 @@ While Eq.~(\ref{eq:pf-solution}) describes accurately the angular rotation of th
 %The main utility of linear reparameterization is to verify the non-newtonian, power-law behavior of the interfacial layer, and to provide an accurate value of m for use in direct fitting of the analytical solution. 
 
 \begin{figure}
- \includegraphics[width=\linewidth,keepaspectratio]{Fig6_rescaled-curves-137.eps}
+ \includegraphics[width=\linewidth,keepaspectratio]{lysozyme/Fig6_rescaled-curves-137}
  \caption{\label{fig:scaling}Angle between wire and magnetic field as a function of time scaled by magnetic field strength $B$ for field strengths of 60 (circle), 70 (triangle), 80 (square), 90 (diamond), and 100 G (inverted triangle).  In (a) time is scaled linearly with field strength; in (b) time is scaled by $B^{1/n}$ with $n=0.6$, the value obtained from fits to $\theta(t)$. The interface age is $t_a = 8200$ seconds.}
 \end{figure}
 
@@ -183,7 +184,7 @@ Another key feature of the protein-layer response in the active microrheology is
 
 
 \begin{figure}
-  \includegraphics[width=\linewidth,keepaspectratio]{Fig7_zeta-powerlaw.eps}
+  \includegraphics[width=\linewidth,keepaspectratio]{lysozyme/Fig7_zeta-powerlaw}
   \caption{\label{fig:zeta-powerlaw}Power-law drag coefficient $\zeta_{pl}$ as a function of interface age. Values are obtained at a range of field strengths as indicated in the legend and are determined from fits using Eq.~(\ref{eq:pf-solution}) with the flow index fixed at $n = 0.70$, the average value at ages $t_a > 3000$ s.}
 \end{figure}
 
@@ -198,17 +199,17 @@ Another key feature of the protein-layer response in the active microrheology is
 
 
 %\begin{figure}
- %\includegraphics[width=\linewidth,keepaspectratio][\linewidth,keepaspectratio]{graphics/rising-viscosity-AT32.eps}
+ %\includegraphics[width=\linewidth,keepaspectratio][\linewidth,keepaspectratio]{graphics/rising-viscosity-AT32}
 % \caption{\label{fig:linearized-AT32}In this trial, a 0.1 mg/ml protein solution remained purely viscous in the region observed, with a viscosity that rose steadily with age, indicating increased $\zeta_{\text{pl}}$. Viscosities were extracted using fits to the form Eq.~(\ref{eq:sasha})}
 %\end{figure}
 
 %\begin{figure}
-%  \includegraphics[width=\linewidth,keepaspectratio][\linewidth, keepaspectratio]{graphics/wire-flow-field.eps}
+%  \includegraphics[width=\linewidth,keepaspectratio][\linewidth, keepaspectratio]{graphics/wire-flow-field}
 %  \caption{\label{fig:wire-flow-field}Colored lines trace the trajectories of passive colloidal spheres in the vicinity of a rotating wire.}
 %\end{figure}
 
 %\begin{figure}
-%  \includegraphics[width=\linewidth,keepaspectratio][\linewidth, keepaspectratio]{graphics/tangential-velocity.eps}
+%  \includegraphics[width=\linewidth,keepaspectratio][\linewidth, keepaspectratio]{graphics/tangential-velocity}
 %  \caption{\label{fig:tangential-velocity}The tangential velocity $v$ of colloids varied with their distance $r$ from the center of the wire rotating at 100 Hz. The line is a best fit to power-law, which gives the dependence $v \propto 1/r^{1.08}$}
 %\end{figure}
 

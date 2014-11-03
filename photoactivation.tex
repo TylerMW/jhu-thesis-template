@@ -1,0 +1,46 @@
+\chapter{Multiscale Diffusion Measurements in Biological Gels Using Photoactivatable Fluorescent Nanoparticles}
+\chaptermark{Photoactivation}
+
+\section{Introduction}
+\section{Sample Peparation}
+\section{Results}
+
+\subsection{Water}
+
+Here we obtain the particles' diffusivity $D$ from the evolution of the observed intensity profile $I(x, t)$. Under carefully tuned experimental conditions, intensity is directly proportional to the concentration of activated particles $c(x, t)$. Of course this approximation is not universally applicable: particles overlap and scatter incident light and the emmitted light from the particles around them, so at high concentrations the observed intensity must ultimately saturate. Also, the sensor imposes a sharp limit of the range of observable intensities. A carefully designed experiment, then, must match the particle concentration $c_0$ and fluorescence (controlled in part by the intensity of incident fluorescent light) to the sensitivity of camera. In our experiments, departures from the linear approximation $I \propto c$ were measurable but small.
+
+In a viscous liquid such as water---characterized in Figure 2 to illustrate the technique---the concentration profile evolves according to the diffusion equation:
+
+\begin{equation}
+ \frac{\partial c}{\partial t} = D\frac{\partial^2 c}{\partial x^2}
+\end{equation}
+
+\noindent An idealized, infinitely thin activation region at $x'$, described by $c(x) = \delta(x-x')$, would spread as a Gaussian that spreads during some time interval $t-t'$ as
+
+\begin{equation}
+ c(x, t) = \frac{1}{\sqrt{4\pi D (t-t')}}\exp\left[-(x-x')^2/4D(t - t')\right]
+\end{equation}
+
+\noindent This Gaussian is the Green function $G(x - x'; t - t')$ for the diffusion equation. Therefore, given any distribution of activated particles $c(x', t')$ at time $t'$, the distribution at some later time $t$ will be
+
+\begin{equation}
+ \label{eqn:convolution}
+ c(x, t) = \int_{-\infty}^\infty G(x - x'; t - t')\, c(x', t')\,dx'
+\end{equation}
+
+\noindent and therefore, if $I \propto c$,
+
+\begin{equation}
+ \label{eqn:convolution}
+ I(x, t) = \int_{-\infty}^\infty G(x - x'; t - t')\, I(x', t')\,dx'.
+\end{equation}
+
+\noindent That is, the intensity profile at $t'$ can be mapped onto the intensity profile at $t$ through convolution with a Gaussian with width $\sigma=4D(t-t')$.
+
+During an experiment, hundreds of intensity profiles were captured at a regular interval. Every profile was mapped onto each future profile through convolution with a Gaussian, as in Eq. (\ref{eqn:convolution}). The width $\sigma$ of the Gaussian generating the most accurate mapping was determined using a nonlinear least-squares fit. Each mapping constituted a separate---though not strictly statistically independent---measurement of diffusivity $D$. Mappings corresponding to the same time interval $\Delta t = t - t'$ were averaged to produce the data points $\sigma^2(\Delta t)$ shown in Figure 2. Finally, an estimate of $D$ was obtained through a linear regression to $\sigma^2(\Delta t)$; its value, 2.42 $\pm$ ??? \textmu m$^2$/s, is within 5\% of the expected value for the diffusivity of 160-\textmu m particles in water.
+
+\subsection{Fibrin}
+\subsection{Cystic Fibrosis Sputum}
+
+\section{Discussion}
+\section{Conclusion}
