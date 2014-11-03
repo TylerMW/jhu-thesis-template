@@ -1,3 +1,6 @@
+# I have no PDF figures, so I will ignore generate PDFs.
+*.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
