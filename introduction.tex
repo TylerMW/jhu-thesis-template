@@ -2,18 +2,78 @@
 \chapter{Introduction}
 \chaptermark{Introduction}
 
-\section{Rheology}
-\subsection{Fundamentals}
-\subsubsection{Theory}
+\section{Overview and Significance}
+
+It was the best of times, it was the worst of times.
+
+\section{Background}
+
+\subsection{Rheology}
+
+\subsubsection{Fundamentals}
+
+Hooke's Law describes a solid as an idealized spring. A small deformation requires an applied force. The larger the deformation, the larger the requisite force, but the force in no way depends on the \emph{rate} of the deformation: fast and slow cost the same. A viscous liquid, as described by Newton's laws, behaves in a complementary way: it resists a small strain with a force proportional to the rate of strain but independent of the magnitude of that strain.
+
+Real materials deviate from these simple pictures in two ways. First, if the force or deformation is large, the relationship between the applied stress and the strain (or, for liquids, strain rate) becomes more complicated than simple proportionality; the response is nonlinear. Second, even if the forces and deformations are small, some materials respond with both solidlike and liquidlike characteristics. For example, when a true solid is subjected to a constant force, it deforms at first and holds that shape henceforth, but a solid with liquidlike characteristics might slowly continue to deform overtime, creeping under the sustained force. Likewise, a liquid with solidlike characteristics might flow under an applied force but recoil slightly when the force is removed. Materials like these are viscoelastic.\cite{Ferry1980}
+
+The theory of linear viscoelastic materials begins with a constitutive relation---a rheological equation of state, relating stress $\sigma$ to strain $\gamma$. The equation states that changes in strain are linear. The shear modulus $G$ is a memory function representing the ratio of stress to strain through a given strain history.
+
+\begin{equation}
+  \label{eqn:linear-constituive}
+  \sigma(t) = \int_{-\infty}^t G(t - t')\dot{\gamma}(t')\, dt'
+\end{equation}
+
+\noindent Let us apply this principle to a simple oscillatory experiment, where a material is periodically deformed with some amplitude $\gamma_0$ at some frequency $\omega$.
+
+\begin{equation}
+  \gamma(t) = \gamma_0 \sin \omega t
+\end{equation}
+
+\noindent Eq. (\ref{eqn:linear-constituive}) gives
+
+\begin{equation}
+  \begin{aligned}
+    \sigma(t) &= \int_0^\infty G(t - t') \gamma_0\,\omega \cos(\omega t')\, dt'\\
+    &= \gamma_0\,\omega \int_0^\infty G(\Delta t) \cos[\omega (t - \Delta t)]\, d\Delta t\\
+    &= \gamma_0 \left(\left[\omega \int_0^\infty G(\Delta t) \sin \omega \Delta t\, d\Delta t \right] \sin \omega t + \left[\omega \int_0^\infty G(\Delta t) \cos \omega \Delta t\, d\Delta t \right] \cos \omega t \right)
+  \end{aligned}
+\end{equation}
+
+Because the bracketed factors depend only on $\omega$, we can define new functions $G'(\omega)$ and $G''(\omega)$, giving
+
+\begin{equation}
+  \sigma(t) = \gamma_0\, (G'(\omega) \sin \omega t + G''(\omega) \cos \omega t).
+\end{equation}
+
+The storage modulus $G'(\omega)$ gives the solidlike response, in phase with the oscillatory strain $\gamma(t)$, and the loss modulus $G''(\omega)$ gives the liquidlike response, 90$^\circ$ out of phase. They comprise the real and imaginary parts of the complex shear modulus, $G^*(\omega) = G'(\omega) + iG''(\omega)$.
+
 \subsubsection{Measurement Techniques}
+
+There is a large family of well-established techniques for measuring a material's frequency-dependent shear modulus $G^*(\omega)$. The stress--strain relationship can be probed in either direction, by applying a certain stress and measuring the resultant shear or by measuring the stress necessary to enforce a certain shear. For example, a creep experiment measures the strain in response to a sudden stress, whereas a stress relaxation experiment measures the stress following a sudden strain. Both of these are transient experiments, observing the material's response as a function of time after a brief change. Oscillatory experiments provide complimentary information, applying a periodic stress or strain at some frequency $\omega$, qualitatively probing the same response as a transient experiment at time $t=1/\omega$. Oscillatory experiments are especially important for probing high frequencies.
+
+Shear rheology measurements, whether transient or oscillatory, strain-controlled or stress-controller, can be performed in many different geometries. Important ones include simple shear flow (Couette flow) between sheared parallel plates or, much more commonly, between rotating coaxial cylinders; flow inside a rectangular slit; torsion between two parallel plates; and torsion between a cone and plate.
+
+All of these are, of course, subject to limitations. In oscillatory experiments the inertia of the rotating tool can dominate the shear response of the sample at  high frequencies. And all geometries contend with the problem of slip, the possibility that the sample might slip along a bounding surface where its velocity was assumed to be zero.
+
+
 \subsection{Interfacial Rheology}
+Bo heuristic and Bo reality
 \subsubsection{Theory}
 \subsubsection{Measurement Techniques}
 \section{Microrheology}
 \subsection{Fundamentals}
+
+FLUCTUATION-DISSIPATION -- classic and quantum
+
 \subsection{Interfacial Microrheology}
+
 \subsection{Passive Microrheology}
+HISTORY: Tracking By Hand
+
+
 \subsection{Active Nanowire Microrheology}
+
+Ways to track wires
 
 \section{Protein Layers}
 \section{Bacterial Biofilms}

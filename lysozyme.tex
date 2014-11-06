@@ -238,5 +238,51 @@ These different experiments on $\beta$-lactoglobulin and lysozyme taken together
 
 In summary, these microrheology experiments tracking the evolution of the air-water interface during lysozyme adsorption have elucidated the linear and nonlinear properties of the viscoelastic transition that the interfacial protein layer undergoes.  As discussed above, interpreting the nature of this transition can contribute to our understanding of the dominant molecular-scale interactions involved in protein-layer formation.  In our analysis of the viscoelasticity of the lysozyme layers, we considered two frameworks for interpretation:  gelation and the formation to a soft glassy phase.  Further microrheology studies that can distinguish more conclusively between these possibilities would be valuable.   Indeed, a key challenge in the field of disordered soft materials is to correlate microstructural properties with the broad distribution of slow relaxation times that give rise to their characteristic rheology.  The quasi-two-dimensional geometry of the layers lends itself to experimental approaches that are unavailable in bulk systems.  For example, experiments comparing imaging with surface pressure have provided insight into layer formation,\cite{Erickson2000} and correlating the results of such experiments with microrheology could provide important new information.  However, another clear conclusion from the microrheology is the sensitivity of the viscoelastic properties of the layers to the specific conditions under which the proteins encounter and associate with the interface.  Hence, any studies comparing rheology with surface structure, surface pressure, other properties would need to take particular care to achieve identical conditions for valid comparisons.
 
+%\section{Appendix}
+
+%We can simplify $_2\text{F}_1(a, b, c; z)$ by exploiting the simple relationship between arguments $b$ and $c$. In general
+
+%\begin{equation}
+%  _2\text{F}_1(a, b, c; z) = 
+%  \sum\limits_{k=0}^\infty\frac{(a)_k (b)_k}{(c)_k}\frac{z^k}{k!}
+%  \ \text{for}\ |z| < 1
+%\end{equation}
+
+%where $(x)_k$ is the ascending factorial $x(x+1)...(x+k-1)$. In the current case, in which all $x > 0$, $(x)_k = \frac{\Gamma(x + k)}{\Gamma(x)}$. Dividing common terms, we can write
+
+%\begin{align}
+%  &_2\text{F}_1\left(\frac{1}{2}, \frac{1-m}{2}, \frac{3-m}{2}; \cos^2 \theta%\right) = \\ \notag
+%  &\displaystyle\sum\limits^\infty_{k=0}\frac{1}{1+\frac{2k}{1-m}}\frac{(2k)!}
+%  {(k!)^2}\left(\frac{\cos\theta}{2}\right)^{2k}\ \text{for}\ \theta > 0.
+%\end{align}
+
+%This expression is simplified but not optimized for numerical evaluation. A more tractable sum obviates large factorials, expressing each term with the partial product of a sequence that converges to 1.
+
+%\begin{equation}
+%_2\text{F}_1\left(\frac{1}{2}, \frac{1-m}{2}, \frac{3-m}{2}; \cos^2 \theta%\right) = \sum\limits_{k=0}^\infty\prod\limits_{k'=0}^k\left(r_{k'}\cos^2\theta\right)
+%\end{equation}
+%where
+%\begin{equation}
+%  r_k =
+%  \frac{(\frac{1}{2} + k)(\frac{1-m}{2} + k)}{(1+k)(\frac{3-m}{2} + k)}
+%\end{equation}
+
+%\subsubsection{No Yield Stress}
+
+%The Power-Law Fluid model is a special case of the Herschel-Bulkley model, which includes both a flow index $n$ and a yield stress $\sigma_0$. In our formulation, the yield stress enters as a yield torque, $\Gamma_0$.
+
+%\begin{equation}
+%  \Gamma = \Gamma_0 + 1.48L^2 K \dot{\theta}^n
+%\end{equation}
+
+%Taking $\Gamma_0 \ll \frac{\mu B}{K}$, we solve to first order in $\Gamma_0$.
+
+%\begin{align}
+%  t(\theta) =&t_{\text{P.F.}}(\theta) + \\ \notag
+%  &\left(\frac{K}{\mu B}\right)^m \frac{\Gamma_0}{\mu B} \cos^{-m}\theta %_2\text{F}_1\left(\frac{1}{2}, -\frac{m}{2}, \frac{2-m}{2}; \cos^2 \theta\right)\bigg\vert^\theta_{\theta_0}
+%\end{align}
+
+%where $t_{\text{P.F.}}$ is Eq.~(\ref{eq:pf_solution}), our solution for a Power-Law Fluid. The fit to our data is not improved by the addition of this term, and the free parameter $\Gamma_0$ converges to zero in the fit.
+
 \section{Acknowledgements}
 We thank M. Cieplak, M. H. Lee, S. Cardinali, B. S. Schuster, T. A. Caswell, N. C. Keim, D. C. Allan, and D. E. Richman for helpful discussions.  This research was supported by the National Science Foundation under grant number CBET-1033985.
