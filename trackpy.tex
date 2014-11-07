@@ -3,14 +3,38 @@
 \chaptermark{Software}
 
 \section{Introduction}
-\section{Review of Crocker-Grier}
+
+Particle tracking is an extremely powerful technique used across many disciplines of science. It has been used to directly image atomic rearrangements in silica glass\cite{Huang2013a}; to image stress and strain in drying colloidal films\cite{Xu2013a}; to image pleats in crystals on curved surfaces\cite{Irvine2010}; to [add biophys. examples].
+
+\section{Review of Crocker--Grier}
 \section{Particle Tracking in Trackpy}
 \section{Subpixel precision and accuracy}
 \section{Prediction Framework}
 \section{Results}
-\subsection{Accuracy vs. "ground truth" and other projects}
+\subsection{Accuracy vs. ``ground truth'' and vs. other approaches}
 \subsection{Performance}
+\section{Testing \& Reproducibility}
+Trackpy is packaged with more than 150 automated tests: snippets of code that exercise a specific capability of trackpy by running toy examples and comparing the output to known correct results. For example, to test feature location, an automated test draws a simple image with several dots and checks that trackpy can locate the dots with a given precision.
+
+Testing benefits a research code in more than one way. Most obviously, tests verify correctness and check special cases. Just as important, tests protect reproducibility. By codifying key results as tests, authors can be sure that these results cannot be broken inadvertently in the future. This empowers users who do not have familiarity with the whole codebase to make contributions and changes with confidence that they will not have unintended consequences. When revisions are submitted to trackpy, a web service automatically executes all the tests, and it alerts the user if any tests fail under the proposed change. Finally, the test suite complements the documentation. Technical users and potential contributors can browse it as a comprehensive demonstration of the ways in which the authors imagined the code would be used.
+
+Trackpy has an unusual level of testing for a code from an academic lab. But the time invested has been worthwhile: it ensures that any research that depends on the code is grounded in a rigorous, scientific approach to software development. This gauruntee earns the confidence of other researchers who decide to use, cite, or contribute to the codebase. It thereby increases the code's longevity and the impact of the development effort.
+
+As trackpy is improved and changed, old research code may cease to reproduce exactly the same results. Testing help ensure that any such "breaking changes" are made deliberately and can be documented. To avoid breaking old code altogether, researchers can make note of which specific version of trackpy was used for a given project and roll back to that version when revisiting the research. Several new projects such as Docker, Dexy, and hashdist [any academic citations for these?] address this need: they recreate complete computing environments, making it possible reproduce research using the specific original versions of all the relevant software. These tools are especially powerful in simulation research, where the entire research project can reproduced on a computer. But they are also useful in experimental science, covering every step after data collection up to the production of the published figure.
+
 \section{Conclusion}
-\subsection{What makes trackpy "modern"?}
-\subsection{Why it can be considered a success so far?}
+\subsection{``A Modern Approach''}
+Trackpy is distinguished among niche academic codes by its careful adherence to the best practices of the open source software community. The most important are code review and open discussion before each revision, automated testing, complete API documentation. Also, code comprehensibility and modularity are key design considerations. Code that merely works is not necessarily easy to test, maintain, extend, or reuse.
+
+Code for academic use is typically developed for a single research project, often by a single researcher, at least at first. Trackpy has benefitted from its co-development by three different researchers working in separate groups at separate institutions on projects with vastly different priorities. The core functionality of trackpy was useful to all, and the healthy tension in the project drove the development of extensible, reusable code. In addition to the core developers, collaborators and undergraduate researchers used trackpy actively during its development. Their use of the cutting-edge code demanded stability and thorough documentation. As the project matured, a wider community of users discovered it and found it useful.
+
+\subsection{Measuring Success}
+The scientific software community has not settled on a single metric for the success of academic software. In the three years since the first lines of code were written, trackpy has supported published research from several academic research groups; trackpy has been downloaded thousands of times through the Python Package Index, though it is impossible to know if the recipients were genuine users; trackpy has been adopted by users from about ten top academic research institutions known to the authors. Most importantly, trackpy has benefitted from code contributions offered by those users, comprising both software experts and relative novices.
+
+Particle tracking is a general problem in a number of fields, and thanks to the pioneering efforts of John Crocker, David Grier, and Eric Weeks, it has a strong tradition of open source code supporting first-rate research.
+
 \subsection{Future Directions}
+
+Trackpy can increase its impact and extend its applicability by incorporating algorithms and strategies from outside the colloids literature and the software lineage of Crocker and Grier. Researchers in the biological and biophysics communities also use these tools, but they have developed additional methods to solve richer problems. For example, in biological contexts, features must be located amidst a complex, busy environment where they are more difficult to distinguish and the methods discussed above can be insufficient to extract them. Tracking and the notion of a trajectory can be subtler, as features might split or merge with each other.
+
+Separately, the scientific Python community continues to grow and develop ever more powerful tools for exploring, processing, and presenting data. Trackpy will build on this ongoing progress, providing tools specific to the needs of particle tracking.
