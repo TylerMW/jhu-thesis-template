@@ -55,7 +55,7 @@ In a viscous liquid such as water---characterized in Figure 2 to illustrate the 
  c(x, t) = \frac{1}{\sqrt{4\pi D (t-t')}}\exp\left[-(x-x')^2/4D(t - t')\right]
 \end{equation}
 
-\noindent This Gaussian is the Green function $G(x - x'; t - t')$ for the diffusion equation. Therefore, given any distribution of activated particles $c(x', t')$ at time $t'$, the distribution at some later time $t$ will be
+\noindent This Gaussian is the Green function $G(x - x'; t - t')$ for the diffusion equation. Therefore, for any distribution of activated particles $c(x', t')$ at time $t'$, the distribution at some later time $t$ will be
 
 \begin{equation}
  \label{eqn:convolution}
@@ -69,7 +69,7 @@ In a viscous liquid such as water---characterized in Figure 2 to illustrate the 
  I(x, t) = \int_{-\infty}^\infty G(x - x'; t - t')\, I(x', t')\,dx'.
 \end{equation}
 
-\noindent That is, the intensity profile at $t'$ can be mapped onto the intensity profile at $t$ through convolution with a Gaussian with width $\sigma=4D(t-t')$.
+\noindent That is, the intensity profile at $t'$ can be mapped onto the intensity profile at $t$ through convolution with a Gaussian with width $\sigma=4D(t-t')$. Breakdown of this mapping would indicated non-diffusive motion, which is not expected for water but could occur in other materials.
 
 During an experiment, hundreds of intensity profiles were captured at a regular interval. Every profile was mapped onto each future profile through convolution with a Gaussian, as in Eq. (\ref{eqn:convolution}). The width $\sigma$ of the Gaussian generating the most accurate mapping was determined using a nonlinear least-squares fit. Each mapping constituted a separate---though not strictly statistically independent---measurement of diffusivity $D$. Mappings corresponding to the same time interval $\Delta t = t - t'$ were averaged to produce the data points $\sigma^2(\Delta t)$ shown in Figure 2. Finally, an estimate of $D$ was obtained through a linear regression to $\sigma^2(\Delta t)$; its value, 2.42 $\pm$ ??? \textmu m$^2$/s, is within 5\% of the expected value for the diffusivity of 160-\textmu m particles in water.
 
