@@ -2,18 +2,34 @@
 \chapter{Software Development: A Modern Particle-Tracking Toolkit}
 \chaptermark{Software}
 
+A large portion of my thesis effort has been devoted to the development of particle tracking and data analysis software, used for my own soft matter research and the work of others in our group. It is also being adopted by other soft matter researchers at Harvard, Princeton, Oxford, U. Chicago, U. Penn, and more. Relying on the growing open-source scientific software community, I have leveraged free, widely-used code for core functionality. By contributing my own particle tracking and data analysis code back to the community, I have increased the impact of the work and encouraged others to share their own improvements to my code, from which all users benefit.
+
+One fast-growing product of this community is the notebook, a standard, browser-based record of code with figures, explanatory text and equations, and links and references. As recently outlined in an article published in \emph{Nature}\cite{Shen2014}, notebooks are making data analysis easier to record, understand, and reproduce. Many authors are publishing notebooks alongside papers, providing the the detail that is essential for others to reproduce the work in a reasonable time scale.
+
 \section{Introduction}
 
 Particle tracking is an extremely powerful technique used across many disciplines of science. It has been used to directly image atomic rearrangements in silica glass\cite{Huang2013a}; to image stress and strain in drying colloidal films\cite{Xu2013a}; to image pleats in crystals on curved surfaces\cite{Irvine2010}; to [add biophys. examples].
 
-\section{Review of Crocker--Grier}
+\section{Review of the Crocker--Grier Particle Tracking Algorithm}
+
+The particle tracking algorithm implemented by Crocker and Grier is performed in two separate steps: locating the particles in each frame and identifying the particles through frames, linking them into trajectories.
+
 \section{Particle Tracking in Trackpy}
+
+
+
+A more detailed walkthrough in included among the extensive documentation and examples in the Appendix A.
+
 \section{Subpixel precision and accuracy}
+
+
+
 \section{Prediction Framework}
 \section{Results}
 \subsection{Accuracy vs. ``ground truth'' and vs. other approaches}
 \subsection{Performance}
 \section{Testing \& Reproducibility}
+
 Trackpy is packaged with more than 150 automated tests: snippets of code that exercise a specific capability of trackpy by running toy examples and comparing the output to known correct results. For example, to test feature location, an automated test draws a simple image with several dots and checks that trackpy can locate the dots with a given precision.
 
 Testing benefits a research code in more than one way. Most obviously, tests verify correctness and check special cases. Just as important, tests protect reproducibility. By codifying key results as tests, authors can be sure that these results cannot be broken inadvertently in the future. This empowers users who do not have familiarity with the whole codebase to make contributions and changes with confidence that they will not have unintended consequences. When revisions are submitted to trackpy, a web service automatically executes all the tests, and it alerts the user if any tests fail under the proposed change. Finally, the test suite complements the documentation. Technical users and potential contributors can browse it as a comprehensive demonstration of the ways in which the authors imagined the code would be used.
