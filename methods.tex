@@ -18,4 +18,45 @@ In fluorescent particle-tracking experiments, a sensitive (high quantum efficien
 
 Two rules should be kept in mind when preparing samples for particle tracking experiments. First, when possible, the chamber containing the sample should be well sealed to minimize sample evaporation and convective flow during the experiment\cite{Savin2005}. Second, the particle concentration must be appropriate for visualizing and tracking individual particles. The average particle spacing must be larger than the average particle displacement from frame to frame, or else the paths of multiple particles will intermingle, making it difficult to accurately reconstruct individual trajectories\cite{Crocker1996}. If the particles are moving very rapidly, a faster frame rate can be used, but if that is not sufficient or feasible, a new specimen with lower particle concentration should be prepared.
 
-\section{Wire Fabrication}
+\section{Ferromagnetic Nickel Nanowires}
+
+For this work, ferromagnetic nickel nanowires were fabricated for use in active microrheology experiments. The wires are 5--35 \textmu m long with a diameter of 350 nm. Because their diameters are comparable to the characteristic size of a magnetic domain in bulk nickel and their aspect ratio is high, they exhibit a single magnetic domain over their entire volume, aligned with the long axis. Their remnant magnetization is 70\% of the saturation of bulk nickel\cite{Sun1999} with a magnetic moment per unit length of $3 \times 10^{-14}\,\text{A}\cdot\text{m}^2$/\textmu m. Thus, they couple strongly to externally applied magnetic fields, and they act as strong, robust probes of soft--matter systems.
+
+They were fabricated by electrochemical deposition inside the pores of a nanoporous template: a ceramic filter, obtained commercially and repurposed for this technique. The fabrication protocol has been described both in published literature\cite{Chien2002} and a thesis\cite{TanaseThesis}.
+
+\section{Tracking Nanowire Orientation}
+
+The raw data of our active microrheology experiment is a series of video microscopy images of a nanowire. The orientation of the wire must be extracted from the images. Although the orientation is plain to any human observer, an automated solution is required due to the sheer volume of data ($10^5$ images) and the necessity of a precise and consistent judgements for providing an angular trajectory through time. The analysis is deceptively difficult to automate. We have developed a family of approaches, each with certain advantages. The important metrics are precision, robustness, and performance (speed).
+
+A standard algorithm for identifying line segments in an image is the Hough Transform. Unfortunately, this is completely ineffective on our data. Although the wires are rods with a high aspect ratio, diffraction effects cause them to appear more like fuzzy ellipses that straight lines.
+
+The simplest effective technique is to fit an ellipse to the wire's silhouette. A threshold defines regions inside and outside the wire, and a least-squares best fit obtains the ellipse that most accurately encloses that region. The orientation of the ellipses long axis is the orientation of the wire. This approach is robust---it almost almost captures orientation within 10$^\circ$---but it is not precise enough to track the wire's rotation smoothly.
+
+A more precise technique is to fit a Gaussian to each individual row or column of pixels in the image, where each Gaussian's center identifies the position of the wire along that line. The linear regression of the Gaussian centers gives the centerline of the wire. This technique is precise but quite slow. Worse, it is brittle, prone to completely missing the wire orientation in noisy or otherwise non-ideal conditions.
+
+The most effective technique is to find the ``inertial axes'' of the image (where brightness = mass). For an image $\{I_i\}$ we compute its covariance matrix $u$
+
+\begin{equation}
+\left( \begin{array}{c}
+\overline{x} \\
+\overline{y} \end{array} \right)
+= \left( \begin{array}{c}
+\sum_{i} I_i x_i / \sum_i I_i \\
+\sum_{i} I_i y_i / \sum_i I_i \end{array} \right)
+\end{equation}
+
+\begin{equation}
+u = \left( \begin{array}{cc}
+\sum_{i} I_i x_i^2 / \sum_i I_i - \overline{x}^2 & \sum_{i} I_i x_i y_i / \sum_i I_i - \overline{x}\,\overline{y} \\
+\sum_{i} I_i x_i y_i / \sum_i I_i - \overline{x}\,\overline{y} & \sum_{i} I_i y_i^2 / \sum_i I_i - \overline{y}^2\end{array} \right)
+\end{equation}
+
+\noindent from which we can obtain the orientation of the wire,
+
+\begin{equation}
+\theta = \frac{1}{2}\tan^{-1}\left(\frac{2u_{11}}{u_{20} - u_{02}}\right).
+\end{equation}
+
+\noindent The technique is much faster than fitting Gaussians, and its precision is comparable. We have also found it to be more robust, though not quite as robust as the ellipse-fitting method.
+
+All of the methods above require standard image preparation techniques. The region of interest is isolated from the surrounding image (the wire is largest connected region of bright pixels). The image is gently blurred to suppress the jagged effect of camera noise, and background pixels are clipped to black, but the feathered edge of the wire's profile is retained.

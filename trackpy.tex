@@ -12,7 +12,20 @@ Particle tracking is an extremely powerful technique used across many discipline
 
 \section{Review of the Crocker--Grier Particle Tracking Algorithm}
 
-The particle tracking algorithm implemented by Crocker and Grier is performed in two separate steps: locating the particles in each frame and identifying the particles through frames, linking them into trajectories.
+The particle tracking algorithm implemented by Crocker and Grier is performed in two steps: locating the particles in each frame and identifying the particles through time, linking coordinates into trajectories.
+
+Trackpy implements the tracking algorithm of Crocker and Grier\cite{Crocker1996}. Theirs and similar algorithms\cite{Ghosh1994} have been widely used in the fields of colloid science, microrheology, biophysics, and biometrical engineering. The Crocker and Grier algorithm was originally implemented in the IDL programming language, but it has since been translated into various other languages, including Python, MATLAB, and C++. (A list of these related projects is maintained in the Trackpy Documentation in Appendix A.) Numerous alternative algorithms have been developed for tracking particles, which we discuss later.
+
+In the algorithm of Crocker and Grier, particle coordinates are identified in four steps: 1) preparing the image using common image-processing techniques; 2) finding local maxima of brightness that may correspond to particles; 3) honing in on each candidate particle’s exact center with subpixel precision; and 4) discerning which of the candidates are true particles based on their morphology and measured brightness.
+
+The software first prepares the images by applying a spatial bandpass filter, which uses a Fourier transform of the image to suppress features with small-scale variation (e.g., camera noise) and large-scale variation (e.g., uneven lighting). This effectively erases any objects in the background that are much smaller or much larger than the size of the particles. Next, the software identifies all local maxima in the processed image. These do not necessarily correspond to the particles' centers, but they provide an initial estimate of where particles may be found. If two or more local maxima are separated by a distance smaller than the particle diameter, they are assumed to belong to the same particle, and the software only retains the brightest one. Then, the software finds the intensity-weighted centroid (``center of mass'') of each spot, which is refined through iterative steps, using the whole region of the particle to resolve its center to a precision much better than 1 pixel. Finally, the software characterizes the neighborhood surrounding each spot by its total brightness, size, and eccentricity (deviation from circular shape). Using these attributes, spots that correspond to actual particles can be distinguished -- and the rest discarded -- with minimal user input. For example, true particles tend to appear bright and circular.
+
+At this point, the software has identified the locations of particles in each frame. Next, the locations must be linked together across frames into particle trajectories. The algorithm robustly handles the complications of real trajectories: Particles are allowed to leave the frame, new particles are allowed to enter, and particles can even be tracked if they temporarily vanish and reappear nearby within a user-specified number of frames. If particles are well separated and moving slowly relative to the frame rate, the task of linking them is simple and unambiguous. If there are many particles in the field of view and they are moving quickly, the Crocker and Grier linking algorithm assigns particles in a way that minimizes the total length of the links. This is grounded in the statistics of random walks; a Brownian particle is most likely to be found near where it was last seen. The linking algorithm is rigorously correct for non-interacting Brownian particles [Crocker and Grier], and it is employed effectively in a variety of tracking applications. (See Section 4.3.2 for a more on trajectory linking.)
+
+As the number of particles in view grows, resolving ambiguous networks is difficult. To simplify the problem, the algorithm requires the user to specify the maximum displacement allowed from one frame to the next. A good choice can simply be obtained by watching the particles and guessing the upper range of their movement between frames. For Brownian motion, the Stokes-Einstein equation provides a guideline as well. After trajectory linking is complete, inspect a histogram of displacements at the shortest time scale. If the histogram decays to zero just before the maximum displacement, then the choice of maximum displacement was proper. However, if the histogram stops abruptly at the maximum displacement, then redo trajectory linking with a larger maximum displacement. If, on the other hand, few displacements are nearly as large as the specified maximum displacement, then it may be set lower for better performance and accuracy.
+
+To process a set of videos with automated tracking, only a few minutes of user attention are required to input parameters and check that they are suitable. A standard computer will typically be able to process at least one video frame per second, though this depends on the number of particles (and therefore the number of calculations needed for a single frame) in the video, as well as the exact automated tracking algorithm and implementation used. Thus, the software can process a typical video of a few hundred frames in a few minutes. The code will output the trajectories in a text file, spreadsheet, or database. Subsequent data analysis will depend on the scientific question under investigation. We discuss data analysis strategies in Section 3.3. 
+
 
 \section{Particle Tracking in Trackpy}
 
@@ -23,8 +36,219 @@ A more detailed walkthrough in included among the extensive documentation and ex
 \section{Subpixel precision and accuracy}
 
 
+Understanding the precision and accuracy of particle localization is critical for conducting reliable particle tracking experiments. In fact, failure to recognize and account for imprecision and inaccuracy in tracking data can lead to misinterpretation (Deschout 2014; Parthasarathy). Precision refers to uncertainty in location, and is defined as the standard deviation of the measured locations when a single stationary particle is imaged and localized multiple times. In contrast, accuracy describes whether the position estimates deviate from the true particle position with systematic bias (Cheezum; Deschout). 
+
+Tracking resolution (i.e., localization precision) is different than microscope resolution. As classically defined, microscope resolution is the minimum distance between two distinguishable points. The resolution of a traditional light microscope is approximately 250 nm, half the wavelength of visible light (Thompson). However, this limit does not apply to locating the center of one isolated point. Using an appropriate algorithm, it is possible to localize the center of an isolated particle or point source to better than the diffraction-limited resolution (Bobroff; Deschout 2014). In fact, researchers can routinely track particles with a lateral spatial precision of tens of nanometers or less using a standard light microscope (Crocker and Hoffman).
+How is it possible to locate a particle’s center to better than pixel resolution? If a particle is only visible as one bright pixel, then we can only say that the particle is located somewhere in that pixel. But if the particle’s image spans multiple pixels -- ideally, more than three pixels across -- we can find its position with subpixel accuracy by taking the average position of these pixels, weighted by brightness. Alternative methods for calculating particle position with subpixel resolution are discussed in Section X.
+
+\subsection{Static Error}
+
+Tracking precision is subject to both fundamental and experimental limitations. The fundamental limitation is photon noise: a particle emits photons stochastically, and consequently, there is statistical uncertainty in locating the particle from its image (Fig. 9 and Table 1) (Ober). The size of this uncertainty is inversely proportional to the square root of the number of detected photons (Ober; Crocker).
+Experimental limitations related to detector and specimen properties can also degrade localization precision. Detector noise, including dark current (thermally-induced electrons in the detector) and readout noise (errors in reading the number of photoelectrons built up in a pixel), can interfere with particle localization (Thompson; Deschout). Detector noise is greatly reduced in high-performance, cooled, EMCCD cameras. Specimen autofluorescence and out-of-focus background fluorescence can also reduce localization precision and accuracy, which can be an issue when tracking particles in a thick biological specimen using standard epifluorescence illumination. Image processing can remove some, but not all, of this background (Deschout 2014). Finally, lateral localization precision of fluorescent particles is best for particles located in the focal plane -- where the particle image is smallest, brightest, and closest to a Gaussian curve in shape -- and decreases with increasing distance from the focal plane (Savin 2008; Deschout 2014).
+This inability to exactly localize particles has been referred to as static error, localization error, or random error (Savin and Doyle; Martin; Crocker). Static error adds a constant offset to the MSD, as derived previously (Martin): $\langle \Delta r^2 \rangle + 2*\epsilon^2$, where $\epsilon$ is the localization uncertainty. A perfectly immobilized particle will have a true MSD = 0 for all lag times, but because of static error, the actual measured MSD will be a non-zero constant, $\langle \Delta r^2 \rangle = 2*\sigma^2$ (Martin; Crocker). However, in most particle tracking experiments, the true underlying MSD is not known a priori, so it may not be immediately evident which component of the measured MSD is “true" and which is artifact.
+In addition to the random error associated with camera noise and pixelation, particle localization is subject to systematic errors, wherein particles can be “biased” toward certain locations, such pixel centers. Several experimental details in both hardware and software are implicated in these errors (Crocker and Hoffman again). Of course, if the particles typically step much more than a pixel between frames, optimizing subpixel resolution is less important. Readers with applications where particles frequently move in subpixel steps are encouraged to consult the referenced literature and consider these details with care.
+
+\subsection{Dynamic Error}
+
+Additional error is introduced by motion blur. When a particle moves substantially during the camera exposure time, a blurred spot is recorded, representing the time integral of the particle’s location (Fig. 10 and Table 1). Particle motion during the exposure time reduces the observed MSD at short times for randomly diffusing particles, since they tend to revisit previously explored regions (Crocker and Hoffman; Berg). This effect has been called dynamic error (Savin and Doyle). In addition, particle motion increases static error, because motion blur reduces localization precision by roughly two-fold under typical experimental conditions, as compared to stationary particles (Deschout 2012).
+Like static error, dynamic error can alter the measured MSD, and can thus introduce inaccuracies when using the MSD to calculate diffusion coefficients and viscoelastic moduli. Static error alone adds a constant offset to the MSD, which flattens the MSD at short time scales on a log-log plot, and makes diffusive motion appear sub-diffusive (Martin). Dynamic error, by itself, decreases the MSD at short time scales, which makes diffusive motion appear like active transport. Static and dynamic error act in opposite directions, so depending on which type of error is larger, one effect may dominate, or occasionally, the two effects may largely cancel each other (Savin and Doyle). Both sources of error are more pronounced at short time scales, when the true MSD is smaller.
+
+\subsection{Experimental Best Practices to Minimize Error}
+Prior to collecting data, it is critical that researchers consider how to minimize static and dynamic error, as they are difficult if not impossible to completely correct after the experiment. To boost signal-to-noise ratio and reduce static error, researchers should choose bright particles, a microscope objective with large numerical aperture, and a sensitive camera with low noise. The only way to reduce dynamic error is to use an exposure time that is small compared to the frame interval (Savin and Doyle; Crocker and Hoffman). Unfortunately, shorter exposure time also increases static error. A compromise is to use the longest exposure time possible without introducing large dynamic error. As a point of reference, for Brownian motion, an exposure time no longer than one quarter the frame interval will cause dynamic error of <10\% at the shortest time scale, and smaller dynamic error at longer time scales (Crocker and Hoffman).
+After conducting an experiment, dynamic error is especially difficult to correct, because it is time-dependent and also depends on the underlying type of motion, which is often unknown (Savin and Doyle). Static error is simpler to quantify and correct ex post facto, since static error adds a constant offset to MSD regardless of the nature of particle motion. Static error can be estimated by tracking particles fixed to a coverslip under signal-to-noise conditions similar to those of the experiment, and then subtracted from the ensemble MSD. However, this simple approach may not precisely mimic the background noise in the experiment, nor the effect that motion blur has on static error. An alternative method has recently been proposed for measuring localization precision of moving particles, though this technique requires a custom microscope configuration (Deschout 2012). Tracking particles in water or other fluids of known viscosity and comparing their MSD to theory may also help reveal types and magnitudes of error. 
+How much do researchers conducting particle tracking experiments need to worry about static and dynamic error? The answer depends both on the system under investigation and on the desired analysis. If the research objective is to precisely quantify diffusion coefficients or viscoelastic moduli, or to fit the data to a model, it is critical to consider error to ensure proper analysis -- especially if the imaging conditions were not ideal. In particular, higher spatial and temporal resolution are needed to accurately study particle motion at short times scales, where the MSD is smaller and the errors proportionally larger. However, if the research objective is to qualitatively compare the transport of two types of nanoparticles with very different behavior, such as mobile and immobile, moderate tracking errors require less thorough examination and are unlikely to alter the final conclusion. 
 
 \section{Prediction Framework}
+
+The tracking algorithm, at its simplest level, takes each particle in
+the previous frame and tries to find it in the current frame. This
+requires knowing where to look for it; if we find an actual particle
+near that spot, it's probably a match. The basic algorithm (Crocker \&
+Grier) was developed to track particles undergoing Brownian diffusion,
+which ideally means that a particle's velocity is uncorrelated from one
+frame to the next. Therefore, the best guess for where a particle is
+going is that it will be near its most recent location.
+
+Let's formalize this guessing as \emph{prediction}. Consider a function
+
+\[P(t_1, t_0, \vec x(t_0))\]
+
+that takes the particle at position $\vec x(t_0)$ and predicts its
+future position $\vec x(t_1)$. The optimal predictor for Brownian motion
+is
+
+\[P(t_1, t_0, \vec x(t_0)) = \vec x(t_0)\]
+
+which happily is also the easiest to implement.
+
+The better our prediction about where to look in the next frame, the
+more likely we will find the one and only particle we seek.
+\texttt{trackpy} looks for the particle in a small region of radius
+\texttt{search\_range}, centered on $P(t_1, t_0, \vec x(t_0))$. So to
+successfully track particle $i$ puts a limit on the error in our
+prediction:
+
+\[\|P(t_1, t_0, \vec x_i(t_0)) - \vec x_i(t_1)\| \le \tt{search\_range}\]
+
+This favors a generous \texttt{search\_range}. However, if
+\texttt{search\_range} is too big, then for each particle in the
+previous frame there will be many possible matches in the current frame,
+and so matching one frame to the next requires the computer to consider
+a mind-boggling set of possibilities. Tracking may become impossibly
+slow, and this causes \texttt{trackpy} to halt and raise a
+\texttt{SubnetOversizeException}, rather than keep you waiting forever.
+So for the Brownian $P$ above, \texttt{search\_range} must be bigger
+than the largest particle displacement between frames, but smaller than
+the typical spacing between particles. If such a value cannot be found
+among the real numbers, then you have a problem.
+
+However, if particle motion is not strictly Brownian, its velocity
+probably \emph{is} correlated in time. We may be able to improve $P$. We
+will now do this with \texttt{trackpy}.
+
+    \subsection{Prescribed predictors}\label{prescribed-predictors}
+
+Let's start by demonstrating the mechanics of $P$ in \texttt{trackpy}.
+\texttt{trackpy}'s various \texttt{link\_} functions accept a
+\texttt{predictor} argument, which is a Python function that implements
+$P$.
+
+Before we see how, let's fake some data: a regular array of particles,
+translating with constant velocity.
+
+
+    Let's visualize 2 frames
+
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_4_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Track and visualize.
+
+    
+    Obviously this is not what we wanted at all! Let's give
+\texttt{trackpy.link\_df\_iter()} a $P$ which reflects this constant
+velocity.
+
+We define \texttt{predict()} for a single particle, and use the
+\texttt{trackpy.predict.predictor} decorator to let it make predictions
+for many particles at once. Then, we pass it to
+\texttt{link\_df\_iter()} via the \texttt{predictor} argument.
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_9_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Yay! Remember: Our predictor doesn't have to know exactly where the
+particle will be; it just has to bias the search enough that the correct
+identification will be made.
+
+    \subsection{Dynamic predictors}\label{dynamic-predictors}
+
+Of course, it's rare that you will know your particles' velocities ahead
+of time. It would be much better for the predictor to ``learn'' about
+the velocities, and allow different particles to have different
+velocities that can change over time. To accomplish this, we have to do
+more than just supply $P$: we have to know particles' most recent
+velocities.
+
+\[P(t_1, t_0, \vec x_i(t_0)) = \vec x_i(t_0) + \frac{\vec x_i(t_0) - \vec x_i(t_{-1})}{t_0 - t_{-1}} (t_1 - t_0)\]
+
+To implement this kind of prediction in \texttt{trackpy}, we use
+instances of the \texttt{trackpy.predict.NearestVelocityPredict} class.
+
+There are a few caveats:
+
+\begin{itemize}
+\item
+  Defining this new $P$ for particle $i$ specifically is problematic,
+  because if a new particle is in frame $t_0$ but wasn't in $t_{-1}$, we
+  won't know its velocity. So newly-appeared particles just borrow the
+  velocity of the closest old particle.
+\item
+  Velocities are undefined in the first frame of the movie, because
+  there is no previous frame. The code falls back to an initial guess of
+  $\vec v_0 = 0$. However, \texttt{NearestVelocityPredict}, and the
+  other classes in \texttt{trackpy.predict}, allow one to instead
+  specify an initial velocity profile, field, etc. See the docstring of
+  each class.
+\item
+  Even though particles may be in motion at the start of the movie, the
+  default of $\vec v_0 = 0$ is not always so bad. In many cases, at
+  least some of the particles are moving slowly enough that they can be
+  tracked and their velocity can be obtained. Because particles with
+  unknown velocity just borrow the nearest known velocity, as we just
+  discussed, this may give the code a foothold to track more particles
+  in later frames. Your mileage may vary.
+\end{itemize}
+
+OK, let's see this in action. We'll make a 3-frame movie that starts
+with small displacements (because of the $\vec v_0 = 0$ assumption) and
+then speeds up.
+
+    Without prediction, tracking can't make it to the 3rd frame.
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_14_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \texttt{NearestVelocityPredict} objects work by watching the output of
+tracking as it happens, and providing a $P$ that always uses the latest
+velocities. To make this easier to use, they include a wrapper for
+\texttt{trackpy.link\_df\_iter()} that does both jobs.
+
+    
+    \subsubsection{Channel flow prediction}\label{channel-flow-prediction}
+
+There is one special case that is common enough to deserve a special
+$P$: channel flow, in which velocities are relatively uniform in one
+direction. For example, if the channel is in the $x$ (i.e. $\hat i$)
+direction, particle velocities are very well approximated as
+
+\[\vec v = \hat i v_x(y)\]
+
+where the velocity profile $v_x(y)$ is a smoothly-varying function
+defined across the channel.
+
+This is implemented by the \texttt{trackpy.predict.ChannelPredict}
+class. When creating an instance, you must specify the size of the bins
+used to create the velocity profile. You can also specify the direction
+of flow; see the class's docstring for details.
+
+Let's create some particles undergoing accelerating shear.
+
+    When we attempt to track them, the algorithm fails for the top row of
+particles.
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_20_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Now, let's try it with prediction:
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_22_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Much better!
+
+    \subsubsection{Drift prediction}\label{drift-prediction}
+
+Finally, the most symmetric prediction class in \texttt{trackpy.predict}
+is \texttt{DriftPredict}. This just makes predictions based on the
+average velocity of all particles. It is useful when you have some
+background convective flow that you'd like to ignore (though it may be
+trying to tell you something!).
+
+
 \section{Results}
 \subsection{Accuracy vs. ``ground truth'' and vs. other approaches}
 \subsection{Performance}
