@@ -29,12 +29,9 @@ To process a set of videos with automated tracking, only a few minutes of user a
 
 \section{Particle Tracking in Trackpy}
 
-
-
 A more detailed walkthrough in included among the extensive documentation and examples in the Appendix A.
 
 \section{Subpixel precision and accuracy}
-
 
 Understanding the precision and accuracy of particle localization is critical for conducting reliable particle tracking experiments. In fact, failure to recognize and account for imprecision and inaccuracy in tracking data can lead to misinterpretation (Deschout 2014; Parthasarathy). Precision refers to uncertainty in location, and is defined as the standard deviation of the measured locations when a single stationary particle is imaged and localized multiple times. In contrast, accuracy describes whether the position estimates deviate from the true particle position with systematic bias (Cheezum; Deschout). 
 
@@ -60,194 +57,162 @@ How much do researchers conducting particle tracking experiments need to worry a
 
 \section{Prediction Framework}
 
-The tracking algorithm, at its simplest level, takes each particle in
+The Crocker--Grier particle tracking algorithm, at its simplest level, takes each particle in
 the previous frame and tries to find it in the current frame. This
-requires knowing where to look for it; if we find an actual particle
-near that spot, it's probably a match. The basic algorithm (Crocker \&
-Grier) was developed to track particles undergoing Brownian diffusion,
-which ideally means that a particle's velocity is uncorrelated from one
-frame to the next. Therefore, the best guess for where a particle is
-going is that it will be near its most recent location.
+requires knowing where to look for it. The algorithm was developed to track particles undergoing Brownian diffusion,
+in which a particle's velocity is uncorrelated from one
+frame to the next. Therefore, a particle is statistically most likely to be found at or near is last known location. The particle in the current frame closet to a particle in the previous frame is likely to be the same particle.
 
 Let's formalize this guessing as \emph{prediction}. Consider a function
 
-\[P(t_1, t_0, \vec x(t_0))\]
+\begin{equation}
+P(t_1, t_0, \vec x(t_0))
+\end{equation}
 
-that takes the particle at position $\vec x(t_0)$ and predicts its
+\noindent that takes the particle at position $\vec x(t_0)$ and predicts its
 future position $\vec x(t_1)$. The optimal predictor for Brownian motion
 is
 
-\[P(t_1, t_0, \vec x(t_0)) = \vec x(t_0)\]
+\begin{equation}
+P(t_1, t_0, \vec x(t_0)) = \vec x(t_0)
+\end{equation}
 
-which happily is also the easiest to implement.
+\noindent which, of course, is also the simplest to implement.
 
 The better our prediction about where to look in the next frame, the
 more likely we will find the one and only particle we seek.
-\texttt{trackpy} looks for the particle in a small region of radius
+In practice, the algorithm looks for the particle in a circular region of radius
 \texttt{search\_range}, centered on $P(t_1, t_0, \vec x(t_0))$. So to
 successfully track particle $i$ puts a limit on the error in our
 prediction:
 
-\[\|P(t_1, t_0, \vec x_i(t_0)) - \vec x_i(t_1)\| \le \tt{search\_range}\]
+\begin{equation}
+\label{eqn:brownian-predictor}
+\|P(t_1, t_0, \vec x_i(t_0)) - \vec x_i(t_1)\| \le \tt{search\_range}
+\end{equation}
 
 This favors a generous \texttt{search\_range}. However, if
 \texttt{search\_range} is too big, then for each particle in the
 previous frame there will be many possible matches in the current frame,
-and so matching one frame to the next requires the computer to consider
-a mind-boggling set of possibilities. Tracking may become impossibly
-slow, and this causes \texttt{trackpy} to halt and raise a
-\texttt{SubnetOversizeException}, rather than keep you waiting forever.
+and so matching one frame to the next requires the computer to evaluate
+an overwhelming set of possibilities, seeking the one that minimizes the total displacements of all particles. Tracking may become extremely
+slow, the problem effectively intractable.
 So for the Brownian $P$ above, \texttt{search\_range} must be bigger
 than the largest particle displacement between frames, but smaller than
-the typical spacing between particles. If such a value cannot be found
-among the real numbers, then you have a problem.
+the typical spacing between particles\cite{Crocker1996}. If such a value does not exist, the Crocker--Grier algorithm is not effective.
 
 However, if particle motion is not strictly Brownian, its velocity
-probably \emph{is} correlated in time. We may be able to improve $P$. We
-will now do this with \texttt{trackpy}.
+probably \emph{is} correlated in time. We may be able to improve $P$. This 
+is the justification for trackpy's prediction feature.
 
-    \subsection{Prescribed predictors}\label{prescribed-predictors}
+\subsection{Prescribed predictors}\label{prescribed-predictors}
 
-Let's start by demonstrating the mechanics of $P$ in \texttt{trackpy}.
-\texttt{trackpy}'s various \texttt{link\_} functions accept a
-\texttt{predictor} argument, which is a Python function that implements
-$P$.
+Consider a toy example: a regular array of particles,
+translating with constant velocity $v$. Figure \ref{fig:prediction-const-features}
+shows the particles' positions in two consecutive frames.
 
-Before we see how, let's fake some data: a regular array of particles,
-translating with constant velocity.
+    \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{prediction/prediction_4_1}
+    \caption{\label{fig:prediction-const-features}An ensemble of particles moving under constant velocity. The red circles represent their positions at some time $t$, the blue crosses at some later time $t'$.}
+    \end{figure}
 
+\noindent Using the Brownian predictor, Eq. (\ref{eqn:brownian-predictor}), trackpy links the particles as shown in Figure \ref{fig:prediction-const-brownian-link}.
 
-    Let's visualize 2 frames
-
-        
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_4_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
+   \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{prediction/prediction_7_0}
+    \caption{\label{fig:prediction-const-brownian-link}An ensemble of particles moving under constant velocity are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). Features that have been identifies as belonging to the same trajectory are connected by a line. In this case, the identification is not correct.}
+    \end{figure}
     
-    Track and visualize.
+\noindent This is obviously not correct. Let us provide a $P$ which reflects this constant
 
-    
-    Obviously this is not what we wanted at all! Let's give
-\texttt{trackpy.link\_df\_iter()} a $P$ which reflects this constant
-velocity.
+\begin{equation}
+\label{eqn:const-predictor}
+P(t_1, t_0, \vec x_i(t_0)) = \vec x_i(t_0) + v(t_1 - t_0)
+\end{equation}
 
-We define \texttt{predict()} for a single particle, and use the
-\texttt{trackpy.predict.predictor} decorator to let it make predictions
-for many particles at once. Then, we pass it to
-\texttt{link\_df\_iter()} via the \texttt{predictor} argument.
-
-
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_9_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    Yay! Remember: Our predictor doesn't have to know exactly where the
-particle will be; it just has to bias the search enough that the correct
+\noindent The result is accurate (Figure \ref{fig:prediction-const-const-link}). To be clear, the predictor does not need to specify exactly where the
+particle will be; it only must bias the search enough that the correct
 identification will be made.
 
-    \subsection{Dynamic predictors}\label{dynamic-predictors}
+   \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{prediction/prediction_9_1}
+    \caption{\label{fig:prediction-const-const-link}An ensemble of particles moving under constant velocity are identified through time using a constant-velocity predictor, Eq. (\ref{eqn:const-predictor}). Features that have been identifies as belonging to the same trajectory are connected by a line.}
+    \end{figure}
 
-Of course, it's rare that you will know your particles' velocities ahead
-of time. It would be much better for the predictor to ``learn'' about
+\subsection{Dynamic predictors}\label{dynamic-predictors}
+
+In typical experimental conditions, the particles' velocities are not known ahead of time. It would be much better for the predictor to ``learn'' about
 the velocities, and allow different particles to have different
-velocities that can change over time. To accomplish this, we have to do
-more than just supply $P$: we have to know particles' most recent
-velocities.
+velocities that can change over time. To accomplish this, $P$ will depend on more than $x_0$, $t_0$, and $t_1$; it will also depend on the particles' most recent velocities.
 
-\[P(t_1, t_0, \vec x_i(t_0)) = \vec x_i(t_0) + \frac{\vec x_i(t_0) - \vec x_i(t_{-1})}{t_0 - t_{-1}} (t_1 - t_0)\]
+\begin{equation}
+\label{eqn:adaptive-predictor}
+P(t_1, t_0, \vec x_i(t_0)) = \vec x_i(t_0) + \frac{\vec x_i(t_0) - \vec x_i(t_{-1})}{t_0 - t_{-1}} (t_1 - t_0)
+\end{equation}
 
-To implement this kind of prediction in \texttt{trackpy}, we use
-instances of the \texttt{trackpy.predict.NearestVelocityPredict} class.
-
-There are a few caveats:
-
-\begin{itemize}
-\item
-  Defining this new $P$ for particle $i$ specifically is problematic,
-  because if a new particle is in frame $t_0$ but wasn't in $t_{-1}$, we
-  won't know its velocity. So newly-appeared particles just borrow the
-  velocity of the closest old particle.
-\item
-  Velocities are undefined in the first frame of the movie, because
-  there is no previous frame. The code falls back to an initial guess of
-  $\vec v_0 = 0$. However, \texttt{NearestVelocityPredict}, and the
-  other classes in \texttt{trackpy.predict}, allow one to instead
-  specify an initial velocity profile, field, etc. See the docstring of
-  each class.
-\item
-  Even though particles may be in motion at the start of the movie, the
-  default of $\vec v_0 = 0$ is not always so bad. In many cases, at
+There are a few caveats.
+  If a new particle is in frame $t_i$ but wasn't in $t_{i-1}$, its velocity is unknown, but it is estimated using the velocity of the nearest existing particle. Of course, in the first frame, all
+  velocities are unknown because
+  there is no previous frame. Fortunately, even though particles may be in motion from the start, an initial guess
+  of $v_0 = 0$ often gives acceptable results. In many cases, at
   least some of the particles are moving slowly enough that they can be
-  tracked and their velocity can be obtained. Because particles with
-  unknown velocity just borrow the nearest known velocity, as we just
-  discussed, this may give the code a foothold to track more particles
-  in later frames. Your mileage may vary.
-\end{itemize}
+  tracked and their velocity can be obtained. Then, because particles with
+  unknown velocity borrow the nearest known velocity, this may give the algorithm a foothold to track more particles
+  in later frames. If that is not sufficient, a more accurate initial guess can be specified. This guess can be a constant velocity, a velocity profile, or N-dimensional velocity field.
 
-OK, let's see this in action. We'll make a 3-frame movie that starts
-with small displacements (because of the $\vec v_0 = 0$ assumption) and
-then speeds up.
-
-    Without prediction, tracking can't make it to the 3rd frame.
+As a demonstration, consider a three-frame sequence that starts
+with small displacements and accelerates. With a simple Brownian predictor, tracking fails at the third frame (Figure \ref{fig:prediction-acceleration-brownian-link}). With the adaptive predictor, Eq. (\ref{eqn:adaptive-predictor}), tracking is accurate (Figure \ref{fig:prediction-acceleration-adaptive-link}).
 
 
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_14_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    \texttt{NearestVelocityPredict} objects work by watching the output of
-tracking as it happens, and providing a $P$ that always uses the latest
-velocities. To make this easier to use, they include a wrapper for
-\texttt{trackpy.link\_df\_iter()} that does both jobs.
+   \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{prediction/prediction_14_1}
+    \caption{\label{fig:prediction-acceleration-brownian-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). The identification is incorrect.}
+    \end{figure}
+   
 
-    
+   \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{prediction/prediction_16_1}
+    \caption{\label{fig:prediction-acceleration-adaptive-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:adaptive-predictor}).}
+    \end{figure}
+
+
     \subsubsection{Channel flow prediction}\label{channel-flow-prediction}
 
-There is one special case that is common enough to deserve a special
-$P$: channel flow, in which velocities are relatively uniform in one
+There are two special cases implemented by trackpy. The first is channel flow, in which velocities are relatively uniform in one
 direction. For example, if the channel is in the $x$ (i.e. $\hat i$)
 direction, particle velocities are very well approximated as
 
-\[\vec v = \hat i v_x(y)\]
+\begin{equation}
+\vec v = \hat i v_x(y)
+\end{equation}
 
-where the velocity profile $v_x(y)$ is a smoothly-varying function
-defined across the channel.
+\noindent where the velocity profile $v_x(y)$ is a smoothly-varying function
+defined across the channel. The required inputs are the direction of flow and size of the bins used to
+define the channel profile. The initial velocities can be specified or arrived at adaptively.
 
-This is implemented by the \texttt{trackpy.predict.ChannelPredict}
-class. When creating an instance, you must specify the size of the bins
-used to create the velocity profile. You can also specify the direction
-of flow; see the class's docstring for details.
+Figure \ref{fig:prediction-channel-brownian-link} shows an example. The simple Brownian prediction fails for the top row of particles at the edge of the channel. With a Channel Flow prediction, the tracking is accurate (Figure \ref{fig:prediction-channel-channel-link}).
 
-Let's create some particles undergoing accelerating shear.
+   \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{prediction/prediction_20_1}
+    \caption{\label{fig:prediction-channel-brownian-link}An ensemble of particle moving in simulated channel flow are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). The identification is incorrect.}
+    \end{figure}
 
-    When we attempt to track them, the algorithm fails for the top row of
-particles.
-
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_20_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    Now, let's try it with prediction:
-
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{prediction_files/prediction_22_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    Much better!
+   \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{prediction/prediction_22_1}
+    \caption{\label{fig:prediction-channel-channel-link}An ensemble of particle moving in simulated channel flow are identified through time using a Channel Flow predictor.}
+    \end{figure}
+   
 
     \subsubsection{Drift prediction}\label{drift-prediction}
-
-Finally, the most symmetric prediction class in \texttt{trackpy.predict}
-is \texttt{DriftPredict}. This just makes predictions based on the
-average velocity of all particles. It is useful when you have some
-background convective flow that you'd like to ignore (though it may be
-trying to tell you something!).
-
+    
+The second special case implemented by trackpy is drift prediction. At the interface, it is common to observed convective flows driven by air currents or heat from the illuminating lamp. In the final data analysis, this motion can often be subtracted away by adopting a reference frame set by the average velocity of the ensemble of particles. Likewise, tracking accuracy and performance is improved by forming a prediction based on the average velocity of the ensemble.
 
 \section{Results}
 \subsection{Accuracy vs. ``ground truth'' and vs. other approaches}
