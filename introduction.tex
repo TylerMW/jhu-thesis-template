@@ -71,7 +71,7 @@ For $Bo \gg 1$, interfacial rheology dominates the force on the rheological prob
 Eq. (\ref{eqn:simple-bo}) applies to a simple viscous interface, but Bo can be generalized for viscoelastic interfaces\cite{Fuller2012}:
 
 \begin{equation}
-  \text{Bo}(\omega) = \frac{G_s''(\omega) - i G_s'(\omega)}{\omega l(\eta_1 + \eta_2)}
+  \text{Bo}(\omega) = \left|\frac{G_s''(\omega) - i G_s'(\omega)}{\omega l(\eta_1 + \eta_2)}\right|
 \end{equation}
 
 
@@ -122,8 +122,6 @@ As described in Section \ref{sec:interfacial-rheology}, experimental techniques 
 
 \subsection{Translational drag on a sphere at an interface}
 
-\emph{NOTE TO BOB: This draft describes the Fischer model. I want to touch on all the forms we have looked at (Hughes, Petrov, original Saffman-Delbruck) and compare them in a figure. Fischer is the standard and should be presented as such, but a roundup of the others would be handy too.}
-
 For viscous layers, the Fischer model provides one means extracting an interfacial viscosity. At Bo $\ll 1$, an expansion in Bo gives the translational drag coefficient $\zeta$ as \cite{Fischer2006}
 
 \begin{equation}
@@ -153,8 +151,14 @@ In the opposite limit, Bo $\gg 1$,
 \subsection{Rotational drag on a rod at an interface}
 
 As with the diffusivity of the spheres, the mobility of the
-rotating wires depends on both the interfacial and subphase properties, and the relative importance of these contributions can be parametrized by the Boussinesq number. According to recent theories by Levine et al.48,49 and by Dhar et al.,50 dealing with the hydrodynamic drag on a highly anisotropic object, such as a wire-shaped colloid, the characteristic length scale entering the Boussinesq number is set by the wire length L UP UNTIL IT BECOMES SMALL, RIGHT?. Specifically, Levine and co-workers predict that the rotational drag coefficient $\zeta_r$ approaches $1.48\eta_s L^2$ for $L/l_0 \ll 1$ and $0.50\eta L^3$ for $L/l_0 \gg 1$, respectively. They also calculate a form for $\zeta_r$ as a function of $L/l_0$ that interpolates between these limits and provide predictions for the translational drag coefficients. Measurements on Ni nanowires within viscous protein layers comparing the drag for translation parallel to the wire axis $\zeta_\parallel$
- with $\zeta_r$ indicate that the results of Levine et al. accurately predict $\zeta_\parallel/\zeta_r$ and we use their theory to analyze the wire rotation.
+rotating wires depends on both the interfacial and subphase properties. The relative importance of these contributions can be parametrized by the Boussinesq number. For a highly anisotropic object, such as a wire-shaped colloid, it has been theorized\cite{Levine2004} that the characteristic length scale entering the Boussinesq number is the wire length $L$ and that the rotation drag is independent of the object's aspect ratio.
+
+\begin{equation}
+\text{Bo} = \frac{\eta_s}{L(\eta_1 + \eta+2)}
+\end{equation}
+
+\noindent At high Bo, the theory predicts\cite{Levine2004} rotational drag coefficient $\zeta_r \rightarrow 1.48\eta_s L^2$; at low Bo, $\zeta_r \rightarrow 0.50\eta L^3$. Measurements on Ni nanowires within viscous protein layers comparing the drag for translation parallel to the wire axis $\zeta_\parallel$
+ with $\zeta_r$ indicate that the results of this theory accurately predict $\zeta_\parallel/\zeta_r$,\cite{Lee2010} and we use their theory to analyze the wire rotation.
 
 \section{Protein Layers}
 
