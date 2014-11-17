@@ -43,29 +43,29 @@ The theory of linear viscoelastic materials begins with a constitutive relation,
   \sigma(t) = \gamma_0\, (G'(\omega) \sin \omega t + G''(\omega) \cos \omega t).
 \end{equation}
 
-\noindent The storage modulus $G'(\omega)$ gives the solidlike response, in phase with the oscillatory strain $\gamma(t)$, and the loss modulus $G''(\omega)$ gives the liquidlike response, 90$^\circ$ out of phase. They comprise the real and imaginary parts of the complex shear modulus, $G^*(\omega) = G'(\omega) + iG''(\omega)$, which is a fundamental linear response function and a quantity through which contact between theory and experiment is often achieved.
+\noindent The storage modulus $G'(\omega)$ gives the solidlike response, in phase with the oscillatory strain $\gamma(t)$, and the loss modulus $G''(\omega)$ gives the liquidlike response, 90$^\circ$ out of phase with the strain and hence in phase with the strain rate. They comprise the real and imaginary parts of the complex shear modulus, $G^*(\omega) = G'(\omega) + iG''(\omega)$, which is a fundamental linear response function and a quantity through which contact between theory and experiment is often achieved.
 
-$G^*(\omega)$ provides a complete description of a material's linear shear response. Finite stresses and deformations can reveal rich, nonlinear responses, including a yield stress (some minimum stress required to deform) or shear-thinning or -thickening (where the marginal deformation decreases or increases with the applied stress).
+$G^*(\omega)$ provides a complete description of a material's linear shear response. Finite stresses and deformations can reveal rich, nonlinear responses, including a yield stress (some nonzero stress above which a solid no longer responds elastically but instead undergoes viscoplastic flow) or shear-thinning or -thickening (where the effective viscosity of the fluid decreases or increases with the applied strain rate).
 \subsubsection{Measurement Techniques}
 
-There is a large family of well-established techniques for measuring a material's frequency-dependent shear modulus $G^*(\omega)$. The stress--strain relationship can be probed in either direction, by applying a certain stress and measuring the resultant strain or by measuring the stress necessary to enforce a certain strain. For example, a creep experiment measures the strain in response to a sudden stress, whereas a stress relaxation experiment measures the stress following a sudden strain. Both of these are transient experiments, observing the material's response as a function of time after a brief change. Oscillatory experiments provide complimentary information, applying a periodic stress or strain at some frequency $\omega$, qualitatively probing the same response as a transient experiment at time $t=1/\omega$. Oscillatory experiments are especially important for probing short-time scale or (high-frequency) behavior.
+There is a large family of well-established techniques for measuring a material's frequency-dependent shear modulus $G^*(\omega)$. The stress--strain relationship can be probed in either direction, by applying a certain stress and measuring the resultant strain or by measuring the stress necessary to enforce a certain strain. For example, a creep experiment measures the strain in response to a sudden stress, whereas a stress relaxation experiment measures the stress following a sudden strain. Both of these are transient experiments, observing the material's response as a function of time after a sudden change. Oscillatory experiments provide complimentary information, applying a periodic stress or strain at some frequency $\omega$, qualitatively probing the same response as a transient experiment at time $t=1/\omega$. Oscillatory experiments are especially important for probing short-time scale or (high-frequency) behavior.
 
-Shear rheology measurements, whether transient or oscillatory, strain-controlled or stress-controlled, can be performed in many different geometries. Important ones include simple shear flow between sheared parallel plates or, much more commonly, between rotating coaxial cylinders (Couette flow); flow inside a rectangular slit; torsion between two parallel plates; and torsion between a cone and plate.
+Shear rheology measurements, whether transient or oscillatory, strain-controlled or stress-controlled, can be performed in many different geometries. Important ones include simple shear flow between translated parallel plates or, equivalently and more commonly, between a rotating cone and plate; shear between rotating coaxial cylinders (Couette flow); flow inside a rectangular slit; and shear between two rotating parallel plates.
 
-All of these are, of course, subject to limitations. In oscillatory experiments the inertia of the rotating tool can dominate the shear response of the sample at  high frequencies. And all experiments contend with the problem of slip, the possibility that the sample might slip along a bounding surface where its velocity was assumed to be zero with respect to the surface.
+All of these are, of course, subject to limitations. In oscillatory experiments the inertia of the rotating tool can dominate the shear response of the sample at  high frequencies. And all experiments contend with the problem of slip, the possibility that the sample might lose mechanical contact with a bounding surface where its velocity was assumed to be zero with respect to the surface.
 
 \subsection{Interfacial Rheology\label{sec:interfacial-rheology}}
 
-Fluid--fluid interfaces exhibit the same complex, non-Newtonian, and nonlinear behavior observed in bulk materials. The central experimental challenge in characterizing these interfaces is isolating the interfacial rheological response from the response of the surrounding fluids, as the flows at the interface and the bulk fluids are intimately coupled\cite{Fuller2011}. The relative contributions of surface and bulk forces on a rheological probe is captured by the Boussinesq number\cite{Derkach2009}
+Interfacial layers at the boundary between two fluids exhibit the same complex, non-Newtonian, and nonlinear behavior observed in bulk materials. The central experimental challenge in characterizing these interfaces is isolating the interfacial rheological response from the response of the surrounding fluids, as the flows at the interface and the bulk fluids are intimately coupled\cite{Fuller2011}. The relative contributions of surface and bulk forces on a rheological probe is captured by the Boussinesq number\cite{Derkach2009}
 
 \begin{equation}
   \label{eqn:simple-bo}
   \text{Bo} = \frac{\eta_s}{l(\eta_1 + \eta_2)}
 \end{equation}
 
-\noindent where $\eta_s$ is the surface viscosity and $\eta_{1,2}$ are the bulk viscosities of the fluids above and below. Oftentimes these fluids are identical ($\eta_1 + \eta_2 = 2\eta_2$) or else one is air and can be neglected ($\eta_1 + \eta_2 = \eta_2$). Surface viscosity and bulk viscosity differ by a dimension of a length, and a length scale $l$ is introduced. The definition of $l$ depends on the particulars of the geometry of the technique. Heuristically, $l$ is sometimes presented as the ratio of the interfacial surface area subtended by the probe to its perimeter of contact with the interface. But this picture of $l$ does not hold, even qualitatively, for some geometries\cite{Levine2004}.
+\noindent where $\eta_s$ is the surface viscosity and $\eta_{1,2}$ are the bulk viscosities of the fluids above and below. In many experiments, these viscosities of the fluids are matched ($\eta_1 + \eta_2 = 2\eta_2$) or else one is air and can be neglected ($\eta_1 + \eta_2 = \eta_2$). Surface viscosity and bulk viscosity differ by a dimension of a length, and a length scale $l$ is introduced. The definition of $l$ depends on the particulars of the geometry of the technique. Heuristically, $l$ is sometimes presented as the ratio of the interfacial surface area subtended by the probe to its perimeter of contact with the interface. But this picture of $l$ does not hold, even qualitatively, for some geometries\cite{Levine2004}.
 
-For $Bo \ll 1$, interfacial rheology dominates the force on the rheological probe. For $Bo \gg 1$, forces from the bulk fluid dominate. Thus, a well designed technique maximizes Bo by minimizing $l$. And, unless the contribution from the bulk is negligible, the technique must be have an accompanying theory for separating the interfacial and bulk contributions.
+For $Bo \gg 1$, interfacial rheology dominates the force on the rheological probe. For $Bo \ll 1$, forces from the bulk fluid dominate. Thus, a well designed technique maximizes Bo by minimizing $l$. And, unless the contribution from the bulk is negligible, the technique must be have an accompanying theory for separating the interfacial and bulk contributions.
 
 
 Eq. (\ref{eqn:simple-bo}) applies to a simple viscous interface, but Bo can be generalized for viscoelastic interfaces\cite{Fuller2012}:
@@ -75,17 +75,17 @@ Eq. (\ref{eqn:simple-bo}) applies to a simple viscous interface, but Bo can be g
 \end{equation}
 
 
-Experimental techniques tackle the experimental challenge of isolating the interfacial response in very different ways. One is a bicone or disk, centered at the interface and operated like a traditional rotating-tool rheometer. The torque on the disks is separated into the components using methods of continuum mechanics\cite{Derkach2009}, initially worked out by Boussinesq himself\cite{Boussinesq1913} and later refined\cite{Oh1978}. The tool makes a full circular patch in the interface and couples strongly to bulk flows, diminishing its sensitivity to the interfacial rheology. This is quantified by the Boussinesq number: the length scale $l$ is related to the radius of the tool, diminishing Bo for given viscosities $\eta$, $\eta_s$.
+Experimental techniques tackle the challenge of isolating the interfacial response in very different ways. One is a bicone or disk, centered at the interface and operated like a traditional rotating-tool rheometer. The torque on the disks is separated into the components using methods of continuum mechanics\cite{Derkach2009}, initially worked out by Boussinesq himself\cite{Boussinesq1913} and later refined\cite{Oh1978}. The tool makes a full circular patch in the interface and couples strongly to bulk flows, diminishing its sensitivity to the interfacial rheology. This is quantified by the Boussinesq number: the length scale $l$ is related to the radius of the tool, diminishing Bo for given viscosities $\eta$, $\eta_2,$ $\eta_s$.
 
 A newer technique improves sensitivity by replacing the bicone with a double wall-ring geometry\cite{Vandebril2010}. The open center of the ring diminishes coupling to bulk flows, and the important scale $l$ becomes the thin width of the ring rather than its radius.
 
-Other techniques rely on millimeter- to micron-scale colloidal probes manipulated by applied optical or magnetic forces. The most popular of these, dubbed the Interfacial Shear Rheometer (ISR), moves a needle through oscillatory translations along its axis\cite{Brooks1999}, gliding it across the interface with a magnetic force. Others use magnetic force to rotate a thin rod\cite{Lee2009,Lee2010} or a disk\cite{Zell2014} or in the plane of the interface. In this work, we employ a rotating needle.
+Other techniques rely on millimeter- to micron-scale probes manipulated by applied optical or magnetic forces. The most popular of these, dubbed the Interfacial Shear Rheometer (ISR), moves a needle pinned to the interface by capillary forces, through oscillatory translations along its axis\cite{Brooks1999} with a magnetic force within a channel to create the equivalent of a parallel plate rheometer. Others use magnetic force to rotate a thin rod\cite{Lee2009,Lee2010} or a disk\cite{Zell2014} or in the plane of the interface. In this work, we employ a rotating needle.
 
 %On the Superficial... http://archive.org/stream/scientificpapers03rayliala/scientificpapers03rayliala_djvu.txt
 
 \section{Microrheology}
 
-Microrheology relates the motion of colloidal particles to the rheology of the surrounding medium. Often, the motion in question is thermally-driven Brownian fluctuation (``passive microrheology'') but in recent years the field has come to encompass ``active microrheology'', where colloids driven by optical or magnetic forces can probe stiffer materials and larger deformations, extending into the regime of nonlinear response.
+Microrheology relates the motion of colloidal particles to the rheology of the surrounding medium. Often, the motion is thermally-driven Brownian fluctuation (``passive microrheology'') but in recent years the field has come to encompass ``active microrheology'', where colloids driven by optical or magnetic forces can probe stiffer materials and larger deformations, extending into the regime of nonlinear response.
 
 When probes are confined to an interface, the technique is sensitive interfacial viscosities as small as 1 nPaásám, well below the range of traditional techniques, and can characterize shear response over a wide of range of frequencies ($10^{-2}$--$10^4$ Hz) \cite{Waigh2005}.
 
@@ -118,13 +118,13 @@ $\frac{1}{2}m\langle v^2(0) = \frac{1}{2}k_B T$
 
 \subsection{\label{sec:interfacial-microrheology}Interfacial Microrheology}
 
-As described in Section \ref{sec:interfacial-rheology}, experimental techniques for measuring interfacial rheology should maximize their sensitivity to the interface relative to the bulk (i.e., maximize Bo), and they should include a procedure for separating the interfacial and bulk contributions. Interfacial microrheology faces the same challenge. Because microrheological probes are typically micron-scale, the geometrical length scale $l$ is small and sensitivity to the interface is high relative to the macrorheology techniques. Nonetheless, coupling to the bulk is not necessarily vanishingly small; the problem of separating the contributions of bulk and interface must still be addressed.
+As described in Section \ref{sec:interfacial-rheology}, experimental techniques for measuring interfacial rheology should maximize their sensitivity to the interface relative to the bulk (i.e., maximize Bo), and they should include a procedure for separating the interfacial and bulk contributions. Interfacial microrheology faces the same challenge. Because microrheological probes are typically micron-scale, the geometrical length scale $l$ is small, and sensitivity to the interface is high relative to the macrorheology techniques. The sensitivity allows microrheology to characterize interfaces with much smaller interfacial viscosity. Nonetheless, coupling to the bulk at some point becomes appreciable; the problem of separating the contributions of bulk and interface must still be addressed.
 
 \subsection{Translational drag on a sphere at an interface}
 
 \emph{NOTE TO BOB: This draft describes the Fischer model. I want to touch on all the forms we have looked at (Hughes, Petrov, original Saffman-Delbruck) and compare them in a figure. Fischer is the standard and should be presented as such, but a roundup of the others would be handy too.}
 
-For viscous layers, the Fischer model provides one means extracting an interfacial viscosity. At Bo $\ll 1$, an expansion in Bo gives the translation drag coefficient $\zeta$ as \cite{Fischer2006}
+For viscous layers, the Fischer model provides one means extracting an interfacial viscosity. At Bo $\ll 1$, an expansion in Bo gives the translational drag coefficient $\zeta$ as \cite{Fischer2006}
 
 \begin{equation}
   \label{eqn:fischer-low-bo}
@@ -151,6 +151,10 @@ In the opposite limit, Bo $\gg 1$,
 
 
 \subsection{Rotational drag on a rod at an interface}
+
+As with the diffusivity of the spheres, the mobility of the
+rotating wires depends on both the interfacial and subphase properties, and the relative importance of these contributions can be parametrized by the Boussinesq number. According to recent theories by Levine et al.48,49 and by Dhar et al.,50 dealing with the hydrodynamic drag on a highly anisotropic object, such as a wire-shaped colloid, the characteristic length scale entering the Boussinesq number is set by the wire length L UP UNTIL IT BECOMES SMALL, RIGHT?. Specifically, Levine and co-workers predict that the rotational drag coefficient $\zeta_r$ approaches $1.48\eta_s L^2$ for $L/l_0 \ll 1$ and $0.50\eta L^3$ for $L/l_0 \gg 1$, respectively. They also calculate a form for $\zeta_r$ as a function of $L/l_0$ that interpolates between these limits and provide predictions for the translational drag coefficients. Measurements on Ni nanowires within viscous protein layers comparing the drag for translation parallel to the wire axis $\zeta_\parallel$
+ with $\zeta_r$ indicate that the results of Levine et al. accurately predict $\zeta_\parallel/\zeta_r$ and we use their theory to analyze the wire rotation.
 
 \section{Protein Layers}
 
