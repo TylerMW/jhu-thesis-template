@@ -18,9 +18,15 @@ Trackpy implements the tracking algorithm of Crocker and Grier\cite{Crocker1996}
 
 Particle coordinates are identified in four steps: 1) preparing the image using common image-processing techniques; 2) finding local maxima of brightness that may correspond to particles; 3) honing in on each candidate particle's exact center with subpixel precision; and 4) discerning which of the candidates are true particles based on their morphology and measured brightness.
 
-The software first prepares the images by applying a spatial bandpass filter, which uses a Fourier transform of the image to suppress features with small-scale variation (e.g., camera noise) and large-scale variation (e.g., uneven lighting). This effectively erases any objects in the background that are much smaller or much larger than the size of the particles. Next, the software identifies all local maxima in the processed image. These do not necessarily correspond to the particles' centers, but they provide an initial estimate of where particles may be found. If two or more local maxima are separated by a distance smaller than the particle diameter, they are assumed to belong to the same particle, and the software only retains the brightest one. Then, the software finds the intensity-weighted centroid (analogous to a center of mass) of each spot, which is refined through iterative steps, using the whole region of the particle to resolve its center to a precision much better than a pixel. (Subpixel resolution is discussed at length in Section \ref{sec:subpx}.) Finally, the software characterizes the neighborhood surrounding each spot by its total brightness, size, and eccentricity (deviation from circular shape). Using these attributes, blobs that correspond to actual particles can be distinguished --- and the rest discarded --- with minimal user input. For example, true colloidal spheres tend to appear bright and circular.
+The software first prepares the images by applying a spatial bandpass filter, which uses a Fourier transform of the image to suppress features with small-scale variation (e.g., camera noise) and large-scale variation (e.g., uneven lighting). This effectively erases any objects in the background that are much smaller or much larger than the size of the particles. Next, the software identifies all local maxima in the processed image. These do not necessarily correspond to the particles' centers, but they provide an initial estimate of where particles may be found. If two or more local maxima are separated by a distance smaller than the particle diameter, they are assumed to belong to the same particle, and the software only retains the brightest one. Then, the software finds the intensity-weighted centroid (analogous to a center of mass) of each spot, which is refined through iterative steps, using the whole region of the particle to resolve its center to a precision much better than a pixel. (Subpixel resolution is discussed at length in Section \ref{sec:subpx}.) Finally, the software characterizes the neighborhood surrounding each spot by its total brightness, size, and eccentricity (deviation from circular shape). Using these attributes, blobs that correspond to actual particles can be distinguished --- and the rest discarded --- with minimal user input. For example, true colloidal spheres tend to appear bright and circular. Figure \ref{fig:annotated-features} shows 1-\textmu m colloidal spheres at the air--water interface identified by trackpy. Most aggregated particles or out-of-focus particles, which are probably below the interface, are correctly ignored based on these characteristics of their appearance.
 
-At this point, the algorithm has identified the locations of particles in each frame. Next, the locations must be linked together across frames into particle trajectories. The algorithm robustly handles the complications of real trajectories: particles may leave the field of view, new particles may enter, and particles can even be tracked if they temporarily vanish and reappear nearby within some specified window of time. If particles are well separated and moving slowly relative to the frame rate, the task of linking them is simple and unambiguous. If there are many particles in the field of view and they are moving quickly, the Crocker--Grier linking algorithm assigns particles in a way that minimizes the total length of the links. This is grounded in the statistics of random walks; a Brownian particle is most likely to be found near where it was last seen. The algorithm is rigorously correct for non-interacting Brownian particles\cite{Crocker1996}, and it is employed effectively in a variety of tracking applications.
+   \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{trackpy/annotated-features}
+    \caption{\label{fig:annotated-features}1-\textmu m colloidal spheres at the air--water interface identified by trackpy with a red circle. (The size of circle is arbitrary---it is only a marker.) Most aggregated particles or out-of-focus particles, which are probably below the interface, are correctly ignored based on characteristics of their appearance. The axes are labeled in pixels.}
+    \end{figure}
+
+At this point, the algorithm has identified the locations of particles in each frame. Next, the locations must be linked together across frames into particle trajectories. The algorithm robustly handles the complications of real trajectories: particles may leave the field of view, new particles may enter, and particles can even be tracked if they temporarily vanish and reappear nearby within some specified window of time. If particles are well separated and move a small fraction of their separation between frames, the task of linking them is simple and unambiguous. If there are many particles in the field of view and they are moving quickly, the Crocker--Grier linking algorithm assigns particles in a way that minimizes the total length of the links. This is grounded in the statistics of random walks; a Brownian particle is most likely to be found near where it was last seen. The algorithm is rigorously correct for non-interacting Brownian particles\cite{Crocker1996}, and it is employed effectively in a variety of tracking applications.
 
 As the number of particles in view grows, resolving ambiguous networks is difficult. To simplify the problem, the algorithm requires the user to specify the maximum displacement allowed from one frame to the next. A good choice can simply be obtained by watching the particles and guessing the upper range of their movement between frames. Then, after trajectory linking is complete, the choice can be validated by verifying that the distribution of observed particle displacements decays short of this cutoff value, that it is not clipped.
 
@@ -96,7 +102,7 @@ For Brownian motion in a viscous liquid, static error adds a constant offset to 
 
 \noindent A perfectly immobilized particle will have $\langle\Delta r^2\rangle_{\text{true}} = 0$ for all lag times, but because of static error, the actual measured MSD will be a non-zero constant, $\langle \Delta r^2 \rangle = 2\epsilon^2$\cite{Martin2002a,Crocker2007}. However, in most particle tracking experiments, the true underlying MSD is not known \emph{a priori}, so it may not be immediately evident how much of the measured MSD is an artifact of noise.
 
-In addition to the random error associated with camera noise and pixelation, particle location is subject to systematic errors, wherein particles can be biased toward certain locations, such as pixel centers. Several experimental details in both hardware and software are implicated in these errors\cite{Crocker2007}. Of course, if the particles typically step much more than a pixel between frames, optimizing subpixel resolution is less important. In this work, they are of greatest importance in characterizing layers exhibiting a solid-like response, when both Brownian vibrations are typically smaller than 1 pixel and convective flow is much slower than 1 pixel per frame.
+In addition to the random error associated with camera noise and pixelation, particle location is subject to systematic errors, wherein particles can be biased toward certain locations, such as pixel centers. Several experimental details in both hardware and software are implicated in these errors\cite{Crocker2007}. Of course, if the particles typically step much more than a pixel between frames, optimizing subpixel resolution is less important. In this work, they are of greatest importance in characterizing layers exhibiting a solid-like response, when both Brownian fluctuations in position are typically smaller than 1 pixel and convective flow is much slower than 1 pixel per frame.
 
 \subsection{Motion Blur}
 
@@ -108,7 +114,7 @@ Additional error is introduced by the finite  camera exposure time. When a parti
     \caption{\label{fig:motion-blur}In these simulated images of diffusing Gaussian blobs, the image on the right was exposed for ten times as long as the image on the left. By collecting more light, it imaged brighter particles, but their precise location is not well defined. The optimal exposure is between these two extremes, as described in the text.}
     \end{figure}
 
-Like static error, dynamic error can alter the measured MSD, and can thus introduce inaccuracies when using the MSD to calculate diffusion coefficients and viscoelastic moduli. Static error alone adds a constant offset to the MSD, which flattens the MSD at short time scales on a log-log plot, and makes diffusive motion appear sub-diffusive\cite{Martin2002a}. Dynamic error, by itself, decreases the MSD at short time scales, which makes diffusive motion appear super-diffusive. Thus, sqtatic and dynamic error distort the MSD in opposite directions, so depending on which type of error is larger, one effect may dominate, or occasionally, the two effects may largely cancel each other \cite{Savin2005}. Both sources of error are more pronounced at short time scales, when the true MSD is smaller.
+Like static error, dynamic error can alter the measured MSD, and can thus introduce inaccuracies when using the MSD to calculate diffusion coefficients and viscoelastic moduli. Static error alone adds a constant offset to the MSD, which flattens the MSD at short time scales on a log-log plot, and makes diffusive motion appear sub-diffusive\cite{Martin2002a}. Dynamic error, by itself, decreases the MSD at short time scales, which makes diffusive motion appear super-diffusive. Thus, static and dynamic error distort the MSD in opposite directions, so depending on which type of error is larger, one effect may dominate, or occasionally, the two effects may largely cancel each other \cite{Savin2005}. Both sources of error are more pronounced at short time scales, when the true MSD is smaller.
 
 \subsection{Experimental Best Practices to Minimize Error}
 Prior to collecting data, it is critical to consider how to minimize static and dynamic error, as they are difficult to completely correct after the experiment. To boost signal-to-noise ratio and reduce static error, researchers should choose a microscope objective with large numerical aperture and a sensitive camera with low noise. The only way to reduce dynamic error is to use an exposure time that is small compared to the frame interval\cite{Savin2005,Crocker2007}. Unfortunately, shorter exposure time also increases static error. Therefore, for given experimental conditions, one should choose the shortest possible exposure time that still gives high-contrast particles (low signal-to-noise). As a point of reference, \cite{Crocker2007}.for Brownian motion, an exposure time no longer than one quarter the frame interval will cause dynamic error of less than 10\% at the shortest time scale, and smaller dynamic error at longer time scales.
@@ -143,14 +149,7 @@ P(t_1, t_0, \vec x(t_0)) = \vec x(t_0)
 The better our prediction about where to look in the next frame, the
 more likely we will find the one and only particle we seek.
 In practice, the algorithm looks for the particle in a circular region of radius
-\texttt{search\_range}, centered on $P(t_1, t_0, \vec x(t_0))$. So, a particle is successfully tracked only if its true position at $t_1$ is sufficiently close to the predicted one:
-
-\begin{equation}
-\label{eqn:brownian-predictor}
-\|P(t_1, t_0, \vec x_i(t_0)) - \vec x_i(t_1)\| \le \tt{search\_range}
-\end{equation}
-
-This favors a generous \texttt{search\_range}. However, if
+\texttt{search\_range}, centered on $P(t_1, t_0, \vec x(t_0))$. So, a particle is successfully tracked only if its true position at $t_1$ is sufficiently close to the predicted one. This favors a generous \texttt{search\_range}. However, if
 \texttt{search\_range} is too large, then for each particle in the
 previous frame there can be many possible matches in the current frame,
 and so matching one frame to the next requires the computer to evaluate
@@ -188,7 +187,7 @@ shows the particles' positions in two consecutive frames.
 
 \begin{equation}
 \label{eqn:const-predictor}
-P(t_1, t_0, \vec x_i(t_0)) = \vec x_i(t_0) + v(t_1 - t_0)
+P(t_1, t_0, \vec x(t_0)) = \vec x(t_0) + v(t_1 - t_0)
 \end{equation}
 
 \noindent The result is accurate (Figure \ref{fig:prediction-const-const-link}). To be clear, the predictor does not need to specify exactly where the
@@ -209,7 +208,7 @@ velocities that can change over time. To accomplish this, $P$ will depend on mor
 
 \begin{equation}
 \label{eqn:adaptive-predictor}
-P(t_1, t_0, \vec x_i(t_0)) = \vec x_i(t_0) + \frac{\vec x_i(t_0) - \vec x_i(t_{-1})}{t_0 - t_{-1}} (t_1 - t_0)
+P(t_1, t_0, \vec x(t_0)) = \vec x(t_0) + \frac{\vec x(t_0) - \vec x(t_{-1})}{t_0 - t_{-1}} (t_1 - t_0)
 \end{equation}
 
 There are a few caveats.
