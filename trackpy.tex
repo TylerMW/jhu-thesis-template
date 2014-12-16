@@ -23,7 +23,7 @@ The software first prepares the images by applying a spatial bandpass filter, wh
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{trackpy/annotated-features}
-    \caption{\label{fig:annotated-features}1-\textmu m colloidal spheres at the air--water interface identified by trackpy with a red circle. (The size of circle is arbitrary---it is only a marker.) Most aggregated particles or out-of-focus particles, which are probably below the interface, are correctly ignored based on characteristics of their appearance. The axes are labeled in pixels.}
+    \caption[1-\textmu m colloidal spheres at the air--water interface identified by trackpy with a red circle.]{\label{fig:annotated-features}1-\textmu m colloidal spheres at the air--water interface identified by trackpy with a red circle. (The size of circle is arbitrary---it is only a marker.) Most aggregated particles or out-of-focus particles, which are probably below the interface, are correctly ignored based on characteristics of their appearance. The axes are labeled in pixels.}
     \end{figure}
 
 At this point, the algorithm has identified the locations of particles in each frame. Next, the locations must be linked together across frames into particle trajectories. The algorithm robustly handles the complications of real trajectories: particles may leave the field of view, new particles may enter, and particles can even be tracked if they temporarily vanish and reappear nearby within some specified window of time. If particles are well separated and move a small fraction of their separation between frames, the task of linking them is simple and unambiguous. If there are many particles in the field of view and they are moving quickly, the Crocker--Grier linking algorithm assigns particles in a way that minimizes the total length of the links. This is grounded in the statistics of random walks; a Brownian particle is most likely to be found near where it was last seen. The algorithm is rigorously correct for non-interacting Brownian particles\cite{Crocker1996}, and it is employed effectively in a variety of tracking applications.
@@ -73,7 +73,7 @@ How is it possible to locate a particle's center to better than pixel resolution
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{trackpy/true-measured-subpx}
-    \caption{\label{fig:true-measured-subpx}The decimal part of the $x$ coordinate reveals sub pixel accuracy. Here the measured $x$ coordinate is plotted against the ground truth. When the mask does not cover the edges of the feature, sub pixel accuracy is poor (red squares). In particular, the location is biased toward pixel edges. With a larger mask, accuracy is good to about a tenth of a pixel (black circles).}
+    \caption[The decimal part of the $x$ coordinate reveals sub pixel accuracy. Here the measured $x$ coordinate is plotted against the ground truth.]{\label{fig:true-measured-subpx}The decimal part of the $x$ coordinate reveals sub pixel accuracy. Here the measured $x$ coordinate is plotted against the ground truth. When the mask does not cover the edges of the feature, sub pixel accuracy is poor (red squares). In particular, the location is biased toward pixel edges. With a larger mask, accuracy is good to about a tenth of a pixel (black circles).}
     \end{figure}
 
 \subsection{Static Error}
@@ -83,7 +83,7 @@ Uncertainty in particle location is variously referred to as static error, local
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{trackpy/signal-noise-comparison}
-    \caption{\label{fig:static-error}Images depict Gaussian blob with increasing levels of simulated random noise. The red X indicates the measured centroid. Overlaid text gives the error between that measured particle position and the ground truth for each particular example.}
+    \caption[Images depict a Gaussian blob with increasing levels of simulated random noise, showing the error in centroid location.]{\label{fig:static-error}Images depict a Gaussian blob with increasing levels of simulated random noise. The red X indicates the measured centroid. Overlaid text gives the error between that measured particle position and the ground truth for each particular example.}
     \end{figure}
     
 Simulated images in Figure \ref{fig:static-error} illustrate noisy images and the resultant error in particle location, as realized by trackpy. In simulated images like these, the ground truth is known. In real images, the uncertainty in particle location can be estimated. A relation was worked out in a detailed study of particle tracking errors by Savin and Doyle\cite{Savin2005}. For a hat-like spot, the uncertainty in location is
@@ -111,7 +111,7 @@ Additional error is introduced by the finite  camera exposure time. When a parti
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{trackpy/motion-blur}
-    \caption{\label{fig:motion-blur}In these simulated images of diffusing Gaussian blobs, the image on the right was exposed for ten times as long as the image on the left. By collecting more light, it imaged brighter particles, but their precise location is not well defined. The optimal exposure is between these two extremes, as described in the text.}
+    \caption[Simulated images illustrate the effect of dynamic error (motion blur).]{\label{fig:motion-blur}In these simulated images of diffusing Gaussian blobs, the image on the right was exposed for ten times as long as the image on the left. By collecting more light, it imaged brighter particles, but their precise location is not well defined. The optimal exposure is between these two extremes, as described in the text.}
     \end{figure}
 
 Like static error, dynamic error can alter the measured MSD, and can thus introduce inaccuracies when using the MSD to calculate diffusion coefficients and viscoelastic moduli. Static error alone adds a constant offset to the MSD, which flattens the MSD at short time scales on a log-log plot, and makes diffusive motion appear sub-diffusive\cite{Martin2002a}. Dynamic error, by itself, decreases the MSD at short time scales, which makes diffusive motion appear super-diffusive. Thus, static and dynamic error distort the MSD in opposite directions, so depending on which type of error is larger, one effect may dominate, or occasionally, the two effects may largely cancel each other \cite{Savin2005}. Both sources of error are more pronounced at short time scales, when the true MSD is smaller.
@@ -173,7 +173,7 @@ shows the particles' positions in two consecutive frames.
     \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_4_1}
-    \caption{\label{fig:prediction-const-features}An ensemble of particles moving under constant velocity. The red circles represent their positions at some time $t$, the blue crosses at some later time $t'$.}
+    \caption[An ensemble of particles moving under constant velocity.]{\label{fig:prediction-const-features}An ensemble of particles moving under constant velocity. The red circles represent their positions at some time $t$, the blue crosses at some later time $t'$.}
     \end{figure}
 
 \noindent Using the Brownian predictor, Eq. (\ref{eqn:brownian-predictor}), trackpy links the particles as shown in Figure \ref{fig:prediction-const-brownian-link}.
@@ -181,7 +181,7 @@ shows the particles' positions in two consecutive frames.
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_7_0}
-    \caption{\label{fig:prediction-const-brownian-link}An ensemble of particles moving under constant velocity are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). Features that have been identified as belonging to the same trajectory are connected by a line and colored alike. In this case, the identification is not correct.}
+    \caption[An ensemble of particles moving under constant velocity are identified through time using a simple Brownian prediction.]{\label{fig:prediction-const-brownian-link}An ensemble of particles moving under constant velocity are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). Features that have been identified as belonging to the same trajectory are connected by a line and colored alike. In this case, the identification is not correct.}
     \end{figure}
     
 \noindent This is obviously not correct. Let us provide a $P$ which reflects this constant
@@ -198,7 +198,7 @@ identification will be made.
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_9_1}
-    \caption{\label{fig:prediction-const-const-link}An ensemble of particles moving under constant velocity are identified through time using a constant-velocity predictor, Eq. (\ref{eqn:const-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
+    \caption[An ensemble of particles moving under constant velocity are identified through time using a constant-velocity predictor.]{\label{fig:prediction-const-const-link}An ensemble of particles moving under constant velocity are identified through time using a constant-velocity predictor, Eq. (\ref{eqn:const-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
     \end{figure}
 
 \subsection{Dynamic predictors}\label{dynamic-predictors}
@@ -229,14 +229,14 @@ with small displacements and accelerates. With a simple Brownian predictor, trac
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_14_1}
-    \caption{\label{fig:prediction-acceleration-brownian-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. The identification is incorrect.}
+    \caption[An ensemble of accelerating particles are identified through time using a simple Brownian prediction.]{\label{fig:prediction-acceleration-brownian-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. The identification is incorrect.}
     \end{figure}
    
 
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_16_1}
-    \caption{\label{fig:prediction-acceleration-adaptive-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:adaptive-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
+    \caption[An ensemble of accelerating particles are identified through time using an adaptive prediction.]{\label{fig:prediction-acceleration-adaptive-link}An ensemble of accelerating particles are identified through time using an adaptive prediction, Eq. (\ref{eqn:adaptive-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
     \end{figure}
 
 
@@ -259,13 +259,13 @@ Figure \ref{fig:prediction-channel-brownian-link} shows an example. The simple B
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_20_1}
-    \caption{\label{fig:prediction-channel-brownian-link}An ensemble of particle moving in simulated channel flow are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. The identification is incorrect.}
+    \caption[An ensemble of particle moving in simulated channel flow are identified through time using a simple Brownian prediction.]{\label{fig:prediction-channel-brownian-link}An ensemble of particle moving in simulated channel flow are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. The identification is incorrect.}
     \end{figure}
 
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_22_1}
-    \caption{\label{fig:prediction-channel-channel-link}An ensemble of particle moving in simulated channel flow are identified through time using a Channel Flow predictor. As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
+    \caption[An ensemble of particle moving in simulated channel flow are identified through time using a Channel Flow predictor.]{\label{fig:prediction-channel-channel-link}An ensemble of particle moving in simulated channel flow are identified through time using a Channel Flow predictor. As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
     \end{figure}
 
     \subsubsection{Drift prediction}\label{drift-prediction}
