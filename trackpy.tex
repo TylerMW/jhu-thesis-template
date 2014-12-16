@@ -141,6 +141,7 @@ future position $\vec x(t_1)$ at time $t_1$. The optimal predictor for Brownian 
 is
 
 \begin{equation}
+\label{eqn:brownian-predictor}
 P(t_1, t_0, \vec x(t_0)) = \vec x(t_0)
 \end{equation}
 
@@ -197,7 +198,7 @@ identification will be made.
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_9_1}
-    \caption{\label{fig:prediction-const-const-link}An ensemble of particles moving under constant velocity are identified through time using a constant-velocity predictor, Eq. (\ref{eqn:const-predictor}). As before, Features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
+    \caption{\label{fig:prediction-const-const-link}An ensemble of particles moving under constant velocity are identified through time using a constant-velocity predictor, Eq. (\ref{eqn:const-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
     \end{figure}
 
 \subsection{Dynamic predictors}\label{dynamic-predictors}
@@ -228,14 +229,14 @@ with small displacements and accelerates. With a simple Brownian predictor, trac
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_14_1}
-    \caption{\label{fig:prediction-acceleration-brownian-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). As before, Features that have been identified as belonging to the same trajectory are connected by a line and colored alike. The identification is incorrect.}
+    \caption{\label{fig:prediction-acceleration-brownian-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. The identification is incorrect.}
     \end{figure}
    
 
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_16_1}
-    \caption{\label{fig:prediction-acceleration-adaptive-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:adaptive-predictor}). As before, Features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
+    \caption{\label{fig:prediction-acceleration-adaptive-link}An ensemble of accelerating particles are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:adaptive-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
     \end{figure}
 
 
@@ -258,13 +259,13 @@ Figure \ref{fig:prediction-channel-brownian-link} shows an example. The simple B
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_20_1}
-    \caption{\label{fig:prediction-channel-brownian-link}An ensemble of particle moving in simulated channel flow are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). As before, Features that have been identified as belonging to the same trajectory are connected by a line and colored alike. The identification is incorrect.}
+    \caption{\label{fig:prediction-channel-brownian-link}An ensemble of particle moving in simulated channel flow are identified through time using a simple Brownian prediction, Eq. (\ref{eqn:brownian-predictor}). As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. The identification is incorrect.}
     \end{figure}
 
    \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{prediction/prediction_22_1}
-    \caption{\label{fig:prediction-channel-channel-link}An ensemble of particle moving in simulated channel flow are identified through time using a Channel Flow predictor. As before, Features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
+    \caption{\label{fig:prediction-channel-channel-link}An ensemble of particle moving in simulated channel flow are identified through time using a Channel Flow predictor. As before, features that have been identified as belonging to the same trajectory are connected by a line and colored alike. }
     \end{figure}
 
     \subsubsection{Drift prediction}\label{drift-prediction}
